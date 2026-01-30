@@ -106,9 +106,14 @@ public class UIManager : MonoSingleton<UIManager>
     {
         System.Type panelType = typeof(T);
 
-        if (!_registeredPanels.TryGetValue(panelType, out MonoBehaviour panelObj))
+        if (!_registeredPanels.TryGetValue(panelType, out MonoBehaviour panelObj) || panelObj == null)
         {
-            Debug.LogError($"[UIManager] Panel {panelType.Name} is not registered. Call RegisterPanel first.");
+             // 如果找不到或者对象已销毁（可能是跨场景时引用丢失），尝试清理并报错
+            if (_registeredPanels.ContainsKey(panelType))
+            {
+                 _registeredPanels.Remove(panelType);
+            }
+            Debug.LogError($"[UIManager] Panel {panelType.Name} is not registered or has been destroyed. Call RegisterPanel first.");
             return;
         }
 
@@ -140,9 +145,14 @@ public class UIManager : MonoSingleton<UIManager>
     {
         System.Type panelType = typeof(T);
 
-        if (!_registeredPanels.TryGetValue(panelType, out MonoBehaviour panelObj))
+        if (!_registeredPanels.TryGetValue(panelType, out MonoBehaviour panelObj) || panelObj == null)
         {
-            Debug.LogError($"[UIManager] Panel {panelType.Name} is not registered. Call RegisterPanel first.");
+             // 如果找不到或者对象已销毁（可能是跨场景时引用丢失），尝试清理并报错
+            if (_registeredPanels.ContainsKey(panelType))
+            {
+                 _registeredPanels.Remove(panelType);
+            }
+            Debug.LogError($"[UIManager] Panel {panelType.Name} is not registered or has been destroyed. Call RegisterPanel first.");
             return;
         }
 
@@ -261,10 +271,18 @@ public class UIManager : MonoSingleton<UIManager>
 
         if (_registeredPanels.TryGetValue(panelType, out MonoBehaviour panelObj))
         {
-            return panelObj as T;
+             if (panelObj != null)
+             {
+                return panelObj as T;
+             }
+             else
+             {
+                 // 对象已销毁，清理引用
+                 _registeredPanels.Remove(panelType);
+             }
         }
 
-        Debug.LogWarning($"[UIManager] Panel {panelType.Name} is not registered.");
+        Debug.LogWarning($"[UIManager] Panel {panelType.Name} is not registered or has been destroyed.");
         return null;
     }
 
@@ -275,7 +293,20 @@ public class UIManager : MonoSingleton<UIManager>
     /// <returns>是否已注册</returns>
     public bool IsPanelRegistered<T>() where T : MonoBehaviour
     {
-        return _registeredPanels.ContainsKey(typeof(T));
+        if (_registeredPanels.TryGetValue(typeof(T), out MonoBehaviour panelObj))
+        {
+            if (panelObj != null)
+            {
+                return true;
+            }
+            else
+            {
+                // 发现引用已销毁，趁机清理
+                _registeredPanels.Remove(typeof(T));
+                return false;
+            }
+        }
+        return false;
     }
 
 

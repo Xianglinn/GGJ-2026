@@ -137,6 +137,16 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
             if (UIManager.Instance != null)
             {
                 UIManager.Instance.HideAllPanels();
+
+                // 尝试查找并注册（如果尚未注册，可能是因为物体默认隐藏导致 Awake 未执行）
+                if (!UIManager.Instance.IsPanelRegistered<UIHomePanel>())
+                {
+                    var panel = FindObjectOfType<UIHomePanel>(true); // true = include inactive
+                    if (panel != null)
+                    {
+                        UIManager.Instance.RegisterPanel(panel);
+                    }
+                }
                 
                 // 显示首页面板
                 if (UIManager.Instance.IsPanelRegistered<UIHomePanel>())
@@ -173,6 +183,16 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
             {
                 UIManager.Instance.HideAllPanels();
                 
+                // 尝试查找并注册（如果尚未注册，可能是因为物体默认隐藏导致 Awake 未执行）
+                if (!UIManager.Instance.IsPanelRegistered<UIProloguePanel>())
+                {
+                    var panel = FindObjectOfType<UIProloguePanel>(true); // true = include inactive
+                    if (panel != null)
+                    {
+                        UIManager.Instance.RegisterPanel(panel);
+                    }
+                }
+
                 // 显示序章面板
                 if (UIManager.Instance.IsPanelRegistered<UIProloguePanel>())
                 {

@@ -67,5 +67,11 @@ public class UIProloguePanel : UIBasePanel<object>
         {
             startButton.onClick.RemoveListener(OnStartButtonClicked);
         }
+
+        // 从 UIManager 注销
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UnregisterPanel<UIProloguePanel>();
+        }
     }
 }
