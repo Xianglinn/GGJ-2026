@@ -10,9 +10,15 @@ public class ItemData
     [Tooltip("原材料唯一 ID（与场景物体、拼图槽一一对应）")]
     public string itemId;
 
+    [Tooltip("该素材是否已被收集")]
+    public bool isCollected = false;
+
     [Header("UI 显示")]
     [Tooltip("素材栏中显示的缩略图精灵")]
     public Sprite iconSprite;
+
+    [Tooltip("素材图标的 Resources 路径（用于动态加载）")]
+    public string spritePath;
 
     [Header("面具拼图参数")]
     [Tooltip("该原材料在面具上的目标局部坐标（以面具 RectTransform 为参考，单位：px）")]

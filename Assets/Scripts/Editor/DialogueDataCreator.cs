@@ -64,21 +64,6 @@ public class DialogueDataCreator : MonoBehaviour
         });
         pathBDialogue.endsConversation = true;
 
-        // 添加选择到欢迎对话
-        welcomeDialogue.choices.Add(new DialogueChoice
-        {
-            choiceText = "选择路径 A（勇敢）",
-            nextDialogue = pathADialogue,
-            setFlag = "chose_path_a"
-        });
-
-        welcomeDialogue.choices.Add(new DialogueChoice
-        {
-            choiceText = "选择路径 B（谨慎）",
-            nextDialogue = pathBDialogue,
-            setFlag = "chose_path_b"
-        });
-
         // 保存资源 (先创建资源，再建立引用)
         string folderPath = "Assets/Resources/Dialogue";
         if (!AssetDatabase.IsValidFolder(folderPath))
@@ -92,7 +77,6 @@ public class DialogueDataCreator : MonoBehaviour
         AssetDatabase.CreateAsset(pathBDialogue, $"{folderPath}/TestDialogue_PathB.asset");
 
         // 此时对象已成为资源，建立引用会被正确记录
-        welcomeDialogue.choices.Clear();
         welcomeDialogue.choices.Add(new DialogueChoice
         {
             choiceText = "选择路径 A（勇敢）",

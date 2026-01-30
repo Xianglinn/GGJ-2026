@@ -103,7 +103,9 @@ public class DialogueManager : MonoSingleton<DialogueManager>
             return;
         }
 
+        Debug.Log($"[DialogueManager] ========== StartDialogue called ==========");
         Debug.Log($"[DialogueManager] Attempting to start dialogue: {dialogueData.dialogueID}");
+        Debug.Log($"[DialogueManager] Current _isDialogueActive state: {_isDialogueActive}");
         Debug.Log($"[DialogueManager] Dialogue has {dialogueData.lines?.Count ?? 0} lines");
         Debug.Log($"[DialogueManager] Dialogue has {dialogueData.choices?.Count ?? 0} choices");
 
@@ -117,7 +119,8 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         // 如果已有对话在进行，先结束它
         if (_isDialogueActive)
         {
-            Debug.Log("[DialogueManager] Ending previous dialogue before starting new one.");
+            Debug.LogWarning("[DialogueManager] A dialogue is already active! Ending it before starting new one.");
+            Debug.LogWarning($"[DialogueManager] This might indicate a timing issue or duplicate call.");
             EndDialogue();
         }
 
@@ -126,12 +129,15 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         _isDialogueActive = true;
         _waitingForInput = false;
 
+        Debug.Log($"[DialogueManager] Dialogue state set: _isDialogueActive = true");
         Debug.Log($"[DialogueManager] Started dialogue: {dialogueData.dialogueID}");
 
         // 触发对话开始事件
         OnDialogueStarted?.Invoke(dialogueData);
+        Debug.Log($"[DialogueManager] OnDialogueStarted event invoked");
 
         // 显示第一行对话
+        Debug.Log($"[DialogueManager] About to call ShowCurrentLine()...");
         ShowCurrentLine();
     }
 

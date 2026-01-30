@@ -1,23 +1,51 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 /// <summary>
-/// 首页 UI 面板：监听任意点击，切换到序章状态
+/// 首页 UI 面板：监听任意点击或按键，切换到序章状态
 /// </summary>
 public class UIHomePanel : UIBasePanel<object>, IPointerClickHandler
 {
+    [Header("UI References")]
+    [SerializeField] private Text hintText;
     private void Awake()
     {
         // 自动注册到 UIManager
         if (UIManager.Instance != null && !UIManager.Instance.IsPanelRegistered<UIHomePanel>())
         {
             UIManager.Instance.RegisterPanel(this);
+            // UIManager.RegisterPanel 会调用 SetActive(false)，我们需要重新激活
+            // 因为 UIHomePanel 需要一直激活来监听输入
+            gameObject.SetActive(true);
         }
+        Debug.Log("[UIHomePanel] Awake called");
+    }
+    
+    private void Start()
+    {
+        Debug.Log($"[UIHomePanel] Start called - GameObject active: {gameObject.activeInHierarchy}");
     }
 
     public override void OnInitialize(object data)
     {
         base.OnInitialize(data);
+        
+        // 设置提示文本
+        if (hintText != null)
+        {
+            hintText.text = "按任意键继续 / Press Any Key to Continue";
+        }
+    }
+    
+    private void Update()
+    {
+        // 检测任意键盘按键
+        if (Input.anyKeyDown)
+        {
+            Debug.Log("[UIHomePanel] Key detected! Triggering transition...");
+            TriggerSceneTransition();
+        }
     }
 
     /// <summary>
@@ -25,9 +53,23 @@ public class UIHomePanel : UIBasePanel<object>, IPointerClickHandler
     /// </summary>
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (GameFlowManager.Instance != null)
+        TriggerSceneTransition();
+    }
+    
+    /// <summary>
+    /// 统一场景切换逻辑，避免重复调用
+    /// </summary>
+    private void TriggerSceneTransition()
+    {
+        // 检查 GameFlowManager 是否存在且当前面板是激活的
+        if (GameFlowManager.Instance != null && gameObject.activeInHierarchy)
         {
+            Debug.Log("[UIHomePanel] Triggering scene transition to Prologue");
             GameFlowManager.Instance.SwitchState(GameState.Prologue);
+        }
+        else
+        {
+            Debug.LogWarning("[UIHomePanel] Cannot trigger transition - GameFlowManager null or panel inactive");
         }
     }
 }

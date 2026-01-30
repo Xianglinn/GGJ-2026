@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// 游戏存档数据结构
@@ -64,6 +65,11 @@ public class DataManager : MonoSingleton<DataManager>
     /// 存档文件扩展名
     /// </summary>
     private const string SAVE_FILE_EXTENSION = ".json";
+
+    /// <summary>
+    /// 素材收集事件（参数：素材 ID）
+    /// </summary>
+    public UnityEvent<string> OnItemCollected = new UnityEvent<string>();
 
     /// <summary>
     /// 获取当前游戏数据
@@ -291,6 +297,13 @@ public class DataManager : MonoSingleton<DataManager>
         {
             _currentData.collectedItems.Add(itemName);
             Debug.Log($"[DataManager] Item collected: {itemName}");
+            
+            // 触发素材收集事件
+            OnItemCollected?.Invoke(itemName);
+        }
+        else
+        {
+            Debug.LogWarning($"[DataManager] Item '{itemName}' already collected.");
         }
     }
 
