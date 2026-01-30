@@ -9,7 +9,7 @@ public class DialogueDataDiagnostic : EditorWindow
 {
     private DialogueData dialogueToCheck;
 
-    [MenuItem("Tools/Dialogue Data Diagnostic")]
+    [MenuItem("Tools/对话系统/Dialogue Data Diagnostic")]
     public static void ShowWindow()
     {
         GetWindow<DialogueDataDiagnostic>("Dialogue Diagnostic");

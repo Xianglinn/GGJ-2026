@@ -10,7 +10,7 @@ public class DialogueTestWindow : EditorWindow
     private DialogueData testDialogue;
     private bool autoStart = false;
 
-    [MenuItem("Tools/Dialogue Test Window")]
+    [MenuItem("Tools/对话系统/Dialogue Test Window")]
     public static void ShowWindow()
     {
         GetWindow<DialogueTestWindow>("Dialogue Test");
