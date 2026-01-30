@@ -37,12 +37,17 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
                         GameObject singletonObject = new GameObject();
                         _instance = singletonObject.AddComponent<T>();
                         singletonObject.name = $"[Singleton] {typeof(T).Name}";
+                        
+                        // 设置 DontDestroyOnLoad
+                        DontDestroyOnLoad(singletonObject);
 
                         Debug.Log($"[MonoSingleton] Created new instance of {typeof(T).Name}");
                     }
                     else
                     {
-                        Debug.Log($"[MonoSingleton] Using existing instance of {typeof(T).Name}");
+                        // 找到现有实例，确保它也设置了 DontDestroyOnLoad
+                        DontDestroyOnLoad(_instance.gameObject);
+                        Debug.Log($"[MonoSingleton] Using existing instance of {typeof(T).Name} and applied DontDestroyOnLoad");
                     }
                 }
 
