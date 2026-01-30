@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed681275848b42d45b1c0a193d3e8337, type: 3}
+  m_Name: TestDialogue_Welcome
+  m_EditorClassIdentifier: 
+  dialogueID: test_welcome
+  lines:
+  - characterName: "\u7CFB\u7EDF"
+    characterPortrait: {fileID: 0}
+    dialogueText: "\u6B22\u8FCE\u6765\u5230\u5BF9\u8BDD\u7CFB\u7EDF\u6D4B\u8BD5\uFF01\u8FD9\u662F\u7B2C\u4E00\u884C\u6D4B\u8BD5\u6587\u672C\u3002"
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 30
+    autoContinue: 0
+    autoContinueDelay: 2
+  - characterName: "\u65C1\u767D"
+    characterPortrait: {fileID: 0}
+    dialogueText: "\u8FD9\u662F\u7B2C\u4E8C\u884C\u5BF9\u8BDD\u3002\u6253\u5B57\u673A\u6548\u679C\u6B63\u5728\u5DE5\u4F5C\u4E2D..."
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 40
+    autoContinue: 0
+    autoContinueDelay: 2
+  - characterName: "\u7CFB\u7EDF"
+    characterPortrait: {fileID: 0}
+    dialogueText: "\u63A5\u4E0B\u6765\u4F60\u5C06\u770B\u5230\u4E00\u4E9B\u9009\u9879\u3002\u8BF7\u505A\u51FA\u4F60\u7684\u9009\u62E9\uFF01"
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 35
+    autoContinue: 0
+    autoContinueDelay: 2
+  choices:
+  - choiceText: "\u9009\u62E9\u8DEF\u5F84 A\uFF08\u52C7\u6562\uFF09"
+    nextDialogue: {fileID: 0}
+    requiredFlag: 
+    setFlag: chose_path_a
+  - choiceText: "\u9009\u62E9\u8DEF\u5F84 B\uFF08\u8C28\u614E\uFF09"
+    nextDialogue: {fileID: 0}
+    requiredFlag: 
+    setFlag: chose_path_b
+  nextDialogue: {fileID: 0}
+  endsConversation: 0
+  onCompleteEventName: 

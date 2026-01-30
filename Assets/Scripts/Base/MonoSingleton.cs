@@ -95,7 +95,17 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         if (_instance == this)
         {
-            _applicationIsQuitting = true;
+            // 注释掉这行，避免在场景切换时错误设置退出标志
+            // _applicationIsQuitting = true;
         }
+    }
+
+    /// <summary>
+    /// 重置单例状态（用于调试和修复）
+    /// </summary>
+    public static void ResetSingletonState()
+    {
+        _applicationIsQuitting = false;
+        Debug.Log($"[MonoSingleton] Reset singleton state for {typeof(T).Name}");
     }
 }

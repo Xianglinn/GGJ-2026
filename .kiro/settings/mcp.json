@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "unityMCP": {
+      "url": "http://localhost:8080/mcp",
+      "env": {},
+      "disabled": false,
+      "autoApprove": [
+        "manage_scene",
+        "find_gameobjects",
+        "manage_components",
+        "read_console",
+        "manage_gameobject",
+        "refresh_unity",
+        "manage_asset",
+        "manage_editor"
+      ]
+    }
+  }
+}

@@ -103,15 +103,21 @@ public class DialogueManager : MonoSingleton<DialogueManager>
             return;
         }
 
+        Debug.Log($"[DialogueManager] Attempting to start dialogue: {dialogueData.dialogueID}");
+        Debug.Log($"[DialogueManager] Dialogue has {dialogueData.lines?.Count ?? 0} lines");
+        Debug.Log($"[DialogueManager] Dialogue has {dialogueData.choices?.Count ?? 0} choices");
+
         if (!dialogueData.Validate())
         {
             Debug.LogError($"[DialogueManager] Dialogue data validation failed: {dialogueData.name}");
+            Debug.LogError($"[DialogueManager] Please check that the dialogue has valid lines with non-empty text.");
             return;
         }
 
         // 如果已有对话在进行，先结束它
         if (_isDialogueActive)
         {
+            Debug.Log("[DialogueManager] Ending previous dialogue before starting new one.");
             EndDialogue();
         }
 
@@ -134,9 +140,23 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     /// </summary>
     private void ShowCurrentLine()
     {
-        if (_currentDialogue == null || _currentLineIndex >= _currentDialogue.lines.Count)
+        if (_currentDialogue == null)
+        {
+            Debug.LogError("[DialogueManager] ShowCurrentLine called but _currentDialogue is null!");
+            return;
+        }
+
+        if (_currentDialogue.lines == null)
+        {
+            Debug.LogError($"[DialogueManager] Dialogue '{_currentDialogue.dialogueID}' has null lines list!");
+            HandleDialogueEnd();
+            return;
+        }
+
+        if (_currentLineIndex >= _currentDialogue.lines.Count)
         {
             // 已经到达对话末尾
+            Debug.Log($"[DialogueManager] Reached end of dialogue lines ({_currentLineIndex}/{_currentDialogue.lines.Count})");
             HandleDialogueEnd();
             return;
         }
@@ -146,9 +166,16 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         Debug.Log($"[DialogueManager] Showing line {_currentLineIndex + 1}/{_currentDialogue.lines.Count}: {currentLine.characterName}");
 
         // 播放语音（如果有）
-        if (currentLine.voiceClip != null && AudioManager.Instance != null)
+        if (currentLine.voiceClip != null)
         {
-            AudioManager.Instance.PlaySFX(currentLine.voiceClip);
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlaySFX(currentLine.voiceClip);
+            }
+            else
+            {
+                Debug.LogWarning("[DialogueManager] AudioManager not found. Voice clip will not play.");
+            }
         }
 
         // 触发显示对话行事件
@@ -204,6 +231,15 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     /// </summary>
     private void HandleDialogueEnd()
     {
+        Debug.Log("[DialogueManager] HandleDialogueEnd called");
+
+        if (_currentDialogue == null)
+        {
+            Debug.LogError("[DialogueManager] HandleDialogueEnd called but _currentDialogue is null!");
+            EndDialogue();
+            return;
+        }
+
         // 检查是否有选择
         List<DialogueChoice> availableChoices = _currentDialogue.GetAvailableChoices();
 
@@ -226,6 +262,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
             else
             {
                 // 结束对话
+                Debug.Log("[DialogueManager] No choices and no next dialogue. Ending dialogue.");
                 EndDialogue();
             }
         }
@@ -256,10 +293,17 @@ public class DialogueManager : MonoSingleton<DialogueManager>
         Debug.Log($"[DialogueManager] Selected choice: {selectedChoice.choiceText}");
 
         // 设置标记（如果有）
-        if (!string.IsNullOrEmpty(selectedChoice.setFlag) && DataManager.Instance != null)
+        if (!string.IsNullOrEmpty(selectedChoice.setFlag))
         {
-            DataManager.Instance.SetStoryFlag(selectedChoice.setFlag, true);
-            Debug.Log($"[DialogueManager] Set story flag: {selectedChoice.setFlag}");
+            if (DataManager.Instance != null)
+            {
+                DataManager.Instance.SetStoryFlag(selectedChoice.setFlag, true);
+                Debug.Log($"[DialogueManager] Set story flag: {selectedChoice.setFlag}");
+            }
+            else
+            {
+                Debug.LogWarning($"[DialogueManager] DataManager not found. Cannot set flag: {selectedChoice.setFlag}");
+            }
         }
 
         _waitingForInput = false;

@@ -82,6 +82,14 @@ public class DialogueUI : UIBasePanel<DialogueData>
         {
             choiceButtonPrefab.gameObject.SetActive(false);
         }
+
+        // 自动注册到 UIManager
+        if (UIManager.Instance != null && !UIManager.Instance.IsPanelRegistered<DialogueUI>())
+        {
+            UIManager.Instance.RegisterPanel(this);
+            Debug.Log("[DialogueUI] Registered self to UIManager in Awake.");
+        }
+
     }
 
     private void OnEnable()
@@ -120,12 +128,44 @@ public class DialogueUI : UIBasePanel<DialogueData>
 
     public override void Show()
     {
+        // 确保事件已订阅
+        SubscribeToEvents();
+
         base.Show();
 
         // 淡入动画
         if (canvasGroup != null)
         {
             StartCoroutine(FadeInCoroutine());
+        }
+    }
+
+    /// <summary>
+    /// 订阅对话管理器事件
+    /// </summary>
+    private void SubscribeToEvents()
+    {
+        if (DialogueManager.Instance != null)
+        {
+            // 先取消订阅，避免重复
+            DialogueManager.Instance.OnDialogueStarted.RemoveListener(OnDialogueStarted);
+            DialogueManager.Instance.OnLineDisplayed.RemoveListener(OnLineDisplayed);
+            DialogueManager.Instance.OnChoicesPresented.RemoveListener(OnChoicesPresented);
+            DialogueManager.Instance.OnDialogueEnded.RemoveListener(OnDialogueEnded);
+            DialogueManager.Instance.OnTypewriterSkipped.RemoveListener(OnTypewriterSkipped);
+
+            // 重新订阅
+            DialogueManager.Instance.OnDialogueStarted.AddListener(OnDialogueStarted);
+            DialogueManager.Instance.OnLineDisplayed.AddListener(OnLineDisplayed);
+            DialogueManager.Instance.OnChoicesPresented.AddListener(OnChoicesPresented);
+            DialogueManager.Instance.OnDialogueEnded.AddListener(OnDialogueEnded);
+            DialogueManager.Instance.OnTypewriterSkipped.AddListener(OnTypewriterSkipped);
+
+            Debug.Log("[DialogueUI] Events subscribed.");
+        }
+        else
+        {
+            Debug.LogError("[DialogueUI] DialogueManager.Instance is null!");
         }
     }
 
@@ -285,6 +325,20 @@ public class DialogueUI : UIBasePanel<DialogueData>
         // 隐藏所有选择按钮
         HideChoiceButtons();
 
+        // 延迟通知对话管理器，让UI有时间更新状态
+        StartCoroutine(SelectChoiceAfterUIUpdate(choiceIndex));
+    }
+
+    /// <summary>
+    /// 在UI更新后选择选项
+    /// </summary>
+    private System.Collections.IEnumerator SelectChoiceAfterUIUpdate(int choiceIndex)
+    {
+        // 等待一帧，让UI完成状态更新
+        yield return null;
+
+        Debug.Log($"[DialogueUI] Notifying DialogueManager of choice selection: {choiceIndex}");
+        
         // 通知对话管理器
         DialogueManager.Instance?.SelectChoice(choiceIndex);
     }

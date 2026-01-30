@@ -257,6 +257,7 @@ public class UIManager : MonoSingleton<UIManager>
         return _registeredPanels.ContainsKey(typeof(T));
     }
 
+
     /// <summary>
     /// 检查面板是否正在显示
     /// </summary>
