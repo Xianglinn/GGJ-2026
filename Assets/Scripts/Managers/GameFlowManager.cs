@@ -6,13 +6,13 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public enum GameState
 {
-    Home,       // 主页
-    Prologue,   // 序章
-    Gameplay,   // 游戏玩法
-    Synthesis,  // 合成
-    Epilogue,   // 尾声
-    Map         // 地图
+    Home,       // 场景1：首页
+    Prologue,   // 场景2：开场剧情
+    Gameplay,   // 场景2/3：寻找原材料 + 面具拼图
+    Epilogue,   // 场景4：尾声剧情
+    LevelMap    // 场景5：关卡地图
 }
+
 
 /// <summary>
 /// 全局游戏流程管理器
@@ -102,14 +102,11 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
             case GameState.Gameplay:
                 HandleGameplayState();
                 break;
-            case GameState.Synthesis:
-                HandleSynthesisState();
-                break;
             case GameState.Epilogue:
                 HandleEpilogueState();
                 break;
-            case GameState.Map:
-                HandleMapState();
+            case GameState.LevelMap:
+                HandleLevelMapState();
                 break;
             default:
                 Debug.LogError($"[GameFlowManager] Unknown state: {state}");
@@ -122,49 +119,31 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     private void HandleHomeState()
     {
         Debug.Log("[GameFlowManager] Entering Home state");
-        // TODO: 加载主页场景，显示主页 UI
-        // 示例：LoadScene("HomeScene");
-        // 示例：ShowUI<HomePanel>();
+        // TODO: 加载或激活首页场景与 UI
     }
 
     private void HandlePrologueState()
     {
         Debug.Log("[GameFlowManager] Entering Prologue state");
-        // TODO: 加载序章场景，显示序章 UI
-        // 示例：LoadScene("PrologueScene");
-        // 示例：ShowUI<ProloguePanel>();
+        // TODO: 加载或激活序章场景与 UI
     }
 
     private void HandleGameplayState()
     {
         Debug.Log("[GameFlowManager] Entering Gameplay state");
-        // TODO: 加载游戏玩法场景，显示游戏 UI
-        // 示例：LoadScene("GameplayScene");
-        // 示例：ShowUI<GameplayPanel>();
-    }
-
-    private void HandleSynthesisState()
-    {
-        Debug.Log("[GameFlowManager] Entering Synthesis state");
-        // TODO: 加载合成场景，显示合成 UI
-        // 示例：LoadScene("SynthesisScene");
-        // 示例：ShowUI<SynthesisPanel>();
+        // TODO: 加载或激活核心玩法（场景2/3）
     }
 
     private void HandleEpilogueState()
     {
         Debug.Log("[GameFlowManager] Entering Epilogue state");
-        // TODO: 加载尾声场景，显示尾声 UI
-        // 示例：LoadScene("EpilogueScene");
-        // 示例：ShowUI<EpiloguePanel>();
+        // TODO: 加载或激活尾声剧情场景
     }
 
-    private void HandleMapState()
+    private void HandleLevelMapState()
     {
-        Debug.Log("[GameFlowManager] Entering Map state");
-        // TODO: 加载地图场景，显示地图 UI
-        // 示例：LoadScene("MapScene");
-        // 示例：ShowUI<MapPanel>();
+        Debug.Log("[GameFlowManager] Entering LevelMap state");
+        // TODO: 加载或激活关卡地图场景
     }
 
     #endregion
