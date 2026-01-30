@@ -40,6 +40,18 @@ public class UIManager : MonoSingleton<UIManager>
             {
                 Debug.LogWarning("[UIManager] No Canvas found in scene. UI panels may not display correctly.");
             }
+            else
+            {
+                // 确保 Canvas 在场景切换时不被销毁
+                DontDestroyOnLoad(_uiCanvas.gameObject);
+                Debug.Log("[UIManager] Canvas set to DontDestroyOnLoad.");
+            }
+        }
+        else
+        {
+            // 如果 Canvas 已经赋值，也要确保它不被销毁
+            DontDestroyOnLoad(_uiCanvas.gameObject);
+            Debug.Log("[UIManager] Canvas set to DontDestroyOnLoad.");
         }
 
         Debug.Log("[UIManager] Initialized successfully.");
@@ -135,6 +147,15 @@ public class UIManager : MonoSingleton<UIManager>
         }
 
         panelObj.gameObject.SetActive(true);
+
+        // 如果是 UIBasePanel，调用 Show 方法
+        // 这会触发事件订阅和动画
+        var basePanel = panelObj.GetComponent<MonoBehaviour>();
+        var showMethod = basePanel.GetType().GetMethod("Show");
+        if (showMethod != null)
+        {
+            showMethod.Invoke(basePanel, null);
+        }
 
         // 添加到面板栈
         if (!_panelStack.Contains(panelObj))

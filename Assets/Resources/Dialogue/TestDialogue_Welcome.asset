@@ -37,11 +37,11 @@ MonoBehaviour:
     autoContinueDelay: 2
   choices:
   - choiceText: "\u9009\u62E9\u8DEF\u5F84 A\uFF08\u52C7\u6562\uFF09"
-    nextDialogue: {fileID: 0}
+    nextDialogue: {fileID: 11400000, guid: 299e20a7552c8cb439a9f1018904f5a4, type: 2}
     requiredFlag: 
     setFlag: chose_path_a
   - choiceText: "\u9009\u62E9\u8DEF\u5F84 B\uFF08\u8C28\u614E\uFF09"
-    nextDialogue: {fileID: 0}
+    nextDialogue: {fileID: 11400000, guid: 1ed68f0bddc943d47abb08d36d0bf905, type: 2}
     requiredFlag: 
     setFlag: chose_path_b
   nextDialogue: {fileID: 0}

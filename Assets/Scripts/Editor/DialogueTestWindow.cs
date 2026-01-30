@@ -113,22 +113,37 @@ public class DialogueTestWindow : EditorWindow
             return;
         }
 
+
         Debug.Log($"[DialogueTestWindow] Starting test dialogue: {testDialogue.dialogueID}");
         
         // 重要：先显示 UI，再开始对话
         if (UIManager.Instance != null)
         {
             UIManager.Instance.ShowPanel<DialogueUI>();
-        }
-
-        // 使用 EditorApplication.delayCall 确保 UI 准备好
-        UnityEditor.EditorApplication.delayCall += () =>
-        {
-            if (DialogueManager.Instance != null && testDialogue != null)
+            
+            // 使用 MonoBehaviour 的协程而不是 EditorApplication.delayCall
+            // 找到场景中的任意 MonoBehaviour 来启动协程
+            var helper = FindObjectOfType<DialogueManager>();
+            if (helper != null)
             {
-                DialogueManager.Instance.StartDialogue(testDialogue);
+                helper.StartCoroutine(StartDialogueAfterDelay(testDialogue));
             }
-        };
+            else
+            {
+                Debug.LogError("[DialogueTestWindow] Cannot find MonoBehaviour to start coroutine!");
+            }
+        }
+    }
+
+    private System.Collections.IEnumerator StartDialogueAfterDelay(DialogueData dialogue)
+    {
+        yield return null;
+        
+        if (DialogueManager.Instance != null && dialogue != null)
+        {
+            Debug.Log($"[DialogueTestWindow] Now starting dialogue: {dialogue.dialogueID}");
+            DialogueManager.Instance.StartDialogue(dialogue);
+        }
     }
 
     private void LoadAndTest(string path)

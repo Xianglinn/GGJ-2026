@@ -7,8 +7,8 @@ using UnityEngine.SceneManagement;
 public enum GameState
 {
     Home,       // 场景1：首页
-    Prologue,   // 场景2：开场剧情
-    Gameplay,   // 场景2/3：寻找原材料 + 面具拼图
+    Prologue,   // 场景2：开场剧情+寻找原材料 
+    Gameplay,   // 场景3：面具拼图
     Epilogue,   // 场景4：尾声剧情
     LevelMap    // 场景5：关卡地图
 }
@@ -119,13 +119,71 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     private void HandleHomeState()
     {
         Debug.Log("[GameFlowManager] Entering Home state");
-        // TODO: 加载或激活首页场景与 UI
+        
+        // 加载 Scene1
+        LoadScene("Scene1");
+        
+        // 场景加载完成后显示 UIHomePanel
+        SceneManager.sceneLoaded += OnScene1Loaded;
+    }
+    
+    private void OnScene1Loaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Scene1")
+        {
+            SceneManager.sceneLoaded -= OnScene1Loaded;
+            
+            // 隐藏所有其他面板
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.HideAllPanels();
+                
+                // 显示首页面板
+                if (UIManager.Instance.IsPanelRegistered<UIHomePanel>())
+                {
+                    UIManager.Instance.ShowPanel<UIHomePanel>();
+                }
+                else
+                {
+                    Debug.LogWarning("[GameFlowManager] UIHomePanel not registered. Please ensure it's in the scene.");
+                }
+            }
+        }
     }
 
     private void HandlePrologueState()
     {
         Debug.Log("[GameFlowManager] Entering Prologue state");
-        // TODO: 加载或激活序章场景与 UI
+        
+        // 加载 Scene2
+        LoadScene("Scene2");
+        
+        // 场景加载完成后显示 UIProloguePanel
+        SceneManager.sceneLoaded += OnScene2Loaded;
+    }
+    
+    private void OnScene2Loaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Scene2")
+        {
+            SceneManager.sceneLoaded -= OnScene2Loaded;
+            
+            // 隐藏所有其他面板
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.HideAllPanels();
+                
+                // 显示序章面板
+                if (UIManager.Instance.IsPanelRegistered<UIProloguePanel>())
+                {
+                    UIManager.Instance.ShowPanel<UIProloguePanel>();
+                }
+                else
+                {
+                    Debug.LogWarning("[GameFlowManager] UIProloguePanel not registered. Please ensure it's in the scene.");
+                }
+            }
+        }
     }
 
     private void HandleGameplayState()
