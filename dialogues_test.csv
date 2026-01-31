@@ -1,0 +1,4 @@
+ID,CharacterName,DialogueText,PortraitName,BGMName,BackgroundName
+101,主角,"你好，请问你是谁？",Hero_Idle,BGM_Adventure,Forest_Day
+101,神秘人,"我是这个森林的守护者。",Mystery_Hidden,BGM_Adventure,Forest_Day
+102,主角,"这里发生了什么？",Hero_Surprised,,Forest_Day
