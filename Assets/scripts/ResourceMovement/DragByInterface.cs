@@ -23,11 +23,7 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     // 初始化组件与缓存
     private void Awake(){
         rectTransform = GetComponent<RectTransform>();
-        parentCanvas = GetComponentInParent<Canvas>();
-        if(parentCanvas != null)
-        {
-            canvasRect = parentCanvas.GetComponent<RectTransform>();
-        }
+        RefreshCanvasRefs();
         canvasGroup = GetComponent<CanvasGroup>();
         if(canvasGroup == null)
         {
@@ -57,6 +53,7 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         }
 
         wasDropped = false;
+        RefreshCanvasRefs();
         RefreshItemInfo();
         startParent = transform.parent;
         startAnchoredPosition = rectTransform.anchoredPosition;
@@ -148,6 +145,14 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         if(cachedItemInfo == null)
         {
             cachedItemInfo = GetComponentInChildren<ItemInfo>();
+        }
+    }
+
+    private void RefreshCanvasRefs(){
+        parentCanvas = GetComponentInParent<Canvas>();
+        if(parentCanvas != null)
+        {
+            canvasRect = parentCanvas.GetComponent<RectTransform>();
         }
     }
 }

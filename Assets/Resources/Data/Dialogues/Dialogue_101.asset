@@ -33,6 +33,6 @@ MonoBehaviour:
     bgmName: BGM_Adventure
     backgroundName: Forest_Day
   choices: []
-  nextDialogue: {fileID: 11400000, guid: 530a2eda2b285a146b019a4c50cb884c, type: 2}
+  nextDialogue: {fileID: 11400000, guid: 299e20a7552c8cb439a9f1018904f5a4, type: 2}
   endsConversation: 0
   onCompleteEventName: 

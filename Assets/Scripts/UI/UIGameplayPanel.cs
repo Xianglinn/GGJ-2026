@@ -42,6 +42,11 @@ public class UIGameplayPanel : UIBasePanel<object>
     public override void OnInitialize(object data)
     {
         base.OnInitialize(data);
+        InventoryPanelSync panelSync = FindObjectOfType<InventoryPanelSync>(true);
+        if(panelSync != null)
+        {
+            panelSync.LoadFromManager();
+        }
         Debug.Log("[UIGameplayPanel] Initialized");
     }
 

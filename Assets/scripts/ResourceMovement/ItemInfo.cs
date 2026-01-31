@@ -3,8 +3,10 @@ using UnityEngine;
 // 物品基础信息与玩法数据
 public class ItemInfo : MonoBehaviour
 {
+    [Header("Identity")]
+    [SerializeField] private string itemId;
+
     [Header("Basic Info")]
-    [SerializeField] private string displayNameCN;
     [TextArea(2, 6)]
     [SerializeField] private string descriptionCN;
     [Header("Mask Part")]
@@ -14,7 +16,7 @@ public class ItemInfo : MonoBehaviour
     [Header("Special Effect")]
     [SerializeField] private SpecialEffectType specialEffects = SpecialEffectType.None;
 
-    public string DisplayNameCN => displayNameCN;
+    public string ItemId => !string.IsNullOrEmpty(itemId) ? itemId : gameObject.name;
     public string DescriptionCN => descriptionCN;
     public MaskPartType PartType => partType;
     public bool IsProcessed => isProcessed;
@@ -27,5 +29,18 @@ public class ItemInfo : MonoBehaviour
         {
             isProcessed = processed;
         }
+    }
+
+    public InventoryItemState ToState(){
+        return new InventoryItemState(ItemId, isProcessed, specialEffects);
+    }
+
+    public void ApplyState(InventoryItemState state){
+        if(state == null)
+        {
+            return;
+        }
+        isProcessed = state.isProcessed;
+        specialEffects = state.specialEffects;
     }
 }
