@@ -87,6 +87,11 @@ public class BlueprintController : MonoBehaviour
                 // 1. 记录首次解锁一个特殊效果
                 if (DataManager.Instance != null)
                 {
+                    // 记录特殊效果解锁
+                    DataManager.Instance.RecordSpecialEffectUnlock(mainEffect);
+                    // 记录面具制作个数
+                    DataManager.Instance.RecordMaskCrafted();
+
                     string flagKey = "Effect_Unlocked_" + mainEffect.ToString();
                     if (!DataManager.Instance.GetStoryFlag(flagKey))
                     {

@@ -7,20 +7,52 @@ using UnityEngine.Events;
 /// 游戏存档数据结构
 /// </summary>
 [System.Serializable]
-public class GameSaveData
+public class GameSaveData : ISerializationCallbackReceiver
 {
     public int currentLevel = 0;
     public List<string> unlockedLevels = new List<string>();
     public List<string> collectedItems = new List<string>();
     public List<InventoryItemState> inventoryItems = new List<InventoryItemState>();
+    
+    [System.NonSerialized]
     public Dictionary<string, bool> storyFlags = new Dictionary<string, bool>();
+    
+    // Dictionary serialization sync lists
+    [SerializeField] private List<string> _storyFlagKeys = new List<string>();
+    [SerializeField] private List<bool> _storyFlagValues = new List<bool>();
+
     public float musicVolume = 0.7f;
     public float sfxVolume = 1f;
     public string lastSaveTime;
 
+    // Persistent Statistics
+    public float totalPlayTime = 0f;
+    public int masksCraftedCount = 0;
+    public List<SpecialEffectType> unlockedSpecialEffects = new List<SpecialEffectType>();
+
     public GameSaveData()
     {
         lastSaveTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+    }
+
+    public void OnBeforeSerialize()
+    {
+        _storyFlagKeys.Clear();
+        _storyFlagValues.Clear();
+        foreach (var kvp in storyFlags)
+        {
+            _storyFlagKeys.Add(kvp.Key);
+            _storyFlagValues.Add(kvp.Value);
+        }
+    }
+
+    public void OnAfterDeserialize()
+    {
+        storyFlags.Clear();
+        for (int i = 0; i < _storyFlagKeys.Count; i++)
+        {
+            storyFlags[_storyFlagKeys[i]] = _storyFlagValues[i];
+        }
     }
 }
 
@@ -89,6 +121,12 @@ public class DataManager : MonoSingleton<DataManager>
 
     private void Update()
     {
+        // 增加游戏时长
+        if (_currentData != null)
+        {
+            _currentData.totalPlayTime += Time.deltaTime;
+        }
+
         // 自动保存逻辑
         if (_enableAutoSave)
         {
@@ -376,6 +414,40 @@ public class DataManager : MonoSingleton<DataManager>
         _currentData.sfxVolume = Mathf.Clamp01(sfxVolume);
         Debug.Log($"[DataManager] Audio settings saved: Music={musicVolume}, SFX={sfxVolume}");
     }
+
+    /// <summary>
+    /// 记录制作了一个面具
+    /// </summary>
+    public void RecordMaskCrafted()
+    {
+        _currentData.masksCraftedCount++;
+        Debug.Log($"[DataManager] Mask crafted! Total: {_currentData.masksCraftedCount}");
+        SaveGame(_currentSaveSlot);
+    }
+
+    /// <summary>
+    /// 记录特殊效果解锁
+    /// </summary>
+    /// <param name="effect">特效类型</param>
+    public void RecordSpecialEffectUnlock(SpecialEffectType effect)
+    {
+        if (!_currentData.unlockedSpecialEffects.Contains(effect))
+        {
+            _currentData.unlockedSpecialEffects.Add(effect);
+            Debug.Log($"[DataManager] Special effect unlocked: {effect}");
+            SaveGame(_currentSaveSlot);
+        }
+    }
+
+    /// <summary>
+    /// 获取游戏时长（秒）
+    /// </summary>
+    public float GetTotalPlayTime() => _currentData.totalPlayTime;
+
+    /// <summary>
+    /// 获取解锁的特殊效果列表
+    /// </summary>
+    public List<SpecialEffectType> GetUnlockedSpecialEffects() => new List<SpecialEffectType>(_currentData.unlockedSpecialEffects);
 
     #endregion
 

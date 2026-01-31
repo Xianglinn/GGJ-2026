@@ -31,34 +31,24 @@ public class UIEpiloguePanel : UIBasePanel<object>
         // 延迟一帧确保UI完全准备好
         yield return null; 
 
-        if (DialogueManager.Instance != null)
-        {
-            isHandlingDialogue = true;
-            DialogueManager.Instance.OnDialogueEnded.AddListener(OnCommonDialogueEnded);
-            
-            Debug.Log($"[UIEpiloguePanel] Attempting to load Common Dialogue: {COMMON_DIALOGUE_PATH}");
-            DialogueManager.Instance.LoadAndStartDialogue(COMMON_DIALOGUE_PATH);
-        }
-        else
-        {
-            Debug.LogError("[UIEpiloguePanel] DialogueManager.Instance is null! Cannot start dialogue.");
-        }
+        // 先开始分支对话
+        StartBranchDialogue();
     }
 
-    private void OnCommonDialogueEnded()
+    private void OnBranchDialogueEnded()
     {
         if (!isHandlingDialogue) return;
         
-        // 移除监听，防止循环触发
+        // 移除监听
         if (DialogueManager.Instance != null)
         {
-            DialogueManager.Instance.OnDialogueEnded.RemoveListener(OnCommonDialogueEnded);
+            DialogueManager.Instance.OnDialogueEnded.RemoveListener(OnBranchDialogueEnded);
         }
 
         isHandlingDialogue = false;
         
-        // 开始分支对话
-        StartBranchDialogue();
+        // 分支结束后，播放通用对话
+        PlayCommonDialogue();
     }
 
     private void StartBranchDialogue()
@@ -81,14 +71,31 @@ public class UIEpiloguePanel : UIBasePanel<object>
                 dialoguePath = "Data/Dialogues/Dialogue_1023";
                 break;
             default:
-                Debug.Log("[UIEpiloguePanel] No special effect triggered, no branch dialogue.");
-                return;
+                Debug.Log("[UIEpiloguePanel] No special effect triggered or unknown effect.");
+                break;
         }
 
         if (!string.IsNullOrEmpty(dialoguePath))
         {
+            isHandlingDialogue = true;
+            DialogueManager.Instance.OnDialogueEnded.AddListener(OnBranchDialogueEnded);
             Debug.Log($"[UIEpiloguePanel] Starting Branch Dialogue for effect: {effect}");
             DialogueManager.Instance.LoadAndStartDialogue(dialoguePath);
+        }
+        else
+        {
+            // 如果没有分支对话，直接播放通用对话
+            Debug.Log("[UIEpiloguePanel] No branch dialogue to play, skipping to Common Dialogue.");
+            PlayCommonDialogue();
+        }
+    }
+
+    private void PlayCommonDialogue()
+    {
+        if (DialogueManager.Instance != null)
+        {
+            Debug.Log($"[UIEpiloguePanel] Starting Common Dialogue: {COMMON_DIALOGUE_PATH}");
+            DialogueManager.Instance.LoadAndStartDialogue(COMMON_DIALOGUE_PATH);
         }
     }
 
@@ -97,7 +104,7 @@ public class UIEpiloguePanel : UIBasePanel<object>
         base.OnDestroy();
         if (DialogueManager.Instance != null)
         {
-            DialogueManager.Instance.OnDialogueEnded.RemoveListener(OnCommonDialogueEnded);
+            DialogueManager.Instance.OnDialogueEnded.RemoveListener(OnBranchDialogueEnded);
         }
 
         // 从 UIManager 注销
