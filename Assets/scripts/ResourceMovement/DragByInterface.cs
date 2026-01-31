@@ -10,6 +10,9 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private Transform startParent;
     private Vector2 startAnchoredPosition;
     private bool wasDropped;
+    private Vector3 originalScale;
+
+    public Vector3 OriginalScale => originalScale;
 
     private void Awake(){
         rectTransform = GetComponent<RectTransform>();
@@ -22,6 +25,10 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         if(canvasGroup == null)
         {
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
+        if(rectTransform != null)
+        {
+            originalScale = rectTransform.localScale;
         }
     }
 
@@ -53,6 +60,11 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             if(workBenchSlot != null)
             {
                 workBenchSlot.ClearItem(this);
+            }
+            BlueprintSlot blueprintSlot = startParent.GetComponent<BlueprintSlot>();
+            if(blueprintSlot != null)
+            {
+                blueprintSlot.ClearItem(this);
             }
         }
         if(parentCanvas != null)
