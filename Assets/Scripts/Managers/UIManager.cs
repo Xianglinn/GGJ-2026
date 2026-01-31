@@ -54,7 +54,30 @@ public class UIManager : MonoSingleton<UIManager>
             Debug.Log("[UIManager] Canvas set to DontDestroyOnLoad.");
         }
 
+        // 检查并保护 EventSystem
+        CheckAndInitEventSystem();
+
         Debug.Log("[UIManager] Initialized successfully.");
+    }
+
+    /// <summary>
+    /// 检查并初始化 EventSystem
+    /// </summary>
+    private void CheckAndInitEventSystem()
+    {
+        UnityEngine.EventSystems.EventSystem eventSystem = FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
+        if (eventSystem == null)
+        {
+            // 创建新的 EventSystem
+            GameObject eventSystemGO = new GameObject("EventSystem");
+            eventSystem = eventSystemGO.AddComponent<UnityEngine.EventSystems.EventSystem>();
+            eventSystemGO.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
+            Debug.Log("[UIManager] Created new EventSystem.");
+        }
+        
+        // 确保 EventSystem 不被销毁
+        DontDestroyOnLoad(eventSystem.gameObject);
+        Debug.Log("[UIManager] EventSystem set to DontDestroyOnLoad.");
     }
 
     /// <summary>
