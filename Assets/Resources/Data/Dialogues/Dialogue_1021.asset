@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed681275848b42d45b1c0a193d3e8337, type: 3}
+  m_Name: Dialogue_1021
+  m_EditorClassIdentifier: 
+  dialogueID: 1021
+  lines:
+  - characterName: "\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD"
+    characterPortrait: {fileID: 0}
+    dialogueText: "\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u0479\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD"
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 30
+    autoContinue: 0
+    autoContinueDelay: 2
+    bgmName: Witch
+    backgroundName: 000000
+  - characterName: "\u0127\u016E"
+    characterPortrait: {fileID: 0}
+    dialogueText: "\u04AA\uFFFD\u063D\uFFFD\u0225\uFFFD\u0136\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u063A\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD"
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 30
+    autoContinue: 0
+    autoContinueDelay: 2
+    bgmName: Witch
+    backgroundName: 000000
+  - characterName: "\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD"
+    characterPortrait: {fileID: 0}
+    dialogueText: "\u02AE\uFFFD\u05B8\uFFFD\u043B\uFFFD\uFFFD\uFFFD\u0136\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD"
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 30
+    autoContinue: 0
+    autoContinueDelay: 2
+    bgmName: Witch
+    backgroundName: 000000
+  - characterName: "\u0127\u016E"
+    characterPortrait: {fileID: 0}
+    dialogueText: "\uFFFD\u07B7\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u01AC\uFFFD\uFFFD\u0127\uFFFD\uFFFD\uFFFD\uFFFD\u032B\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u05F3\u05BE\u05AE\uFFFD\u02E3\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u04F0\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u03E1\uFFFD"
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 30
+    autoContinue: 0
+    autoContinueDelay: 2
+    bgmName: Witch
+    backgroundName: 000000
+  - characterName: "\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD"
+    characterPortrait: {fileID: 0}
+    dialogueText: "\uFFFD\uFFFD\uFFFD\u01E3\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u01BA\uFFFD\u02A7\uFFFD\uFFFD\uFFFD\u02E1\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u04BB\uFFFD\u0436\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u013C\uFFFD\uFFFD\uFFFD\u04BB\uFFFD\uFFFD\uFFFD\u0563\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u01F7\U0007BE7B\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u04BB\uFFFD\uFFFD\uFFFD\uFFFD\u0579\uFFFD\uFFFD"
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 30
+    autoContinue: 0
+    autoContinueDelay: 2
+    bgmName: Witch
+    backgroundName: 000000
+  - characterName: "\u0127\u016E"
+    characterPortrait: {fileID: 0}
+    dialogueText: "\uFFFD\u0539\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u01BB\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u01FF\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u68EC\uFFFD\uFFFD\uFFFD\uFFFD\xFB\uFFFD\u0432\uFFFD\u023E\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u58EC\uFFFD\uFFFD\u023B\xFB\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u013F\uFFFD\uFFFD\u0721\uFFFD"
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 30
+    autoContinue: 0
+    autoContinueDelay: 2
+    bgmName: Witch
+    backgroundName: 000000
+  - characterName: "\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD"
+    characterPortrait: {fileID: 0}
+    dialogueText: "\uFFFD\xE1\uFFFD\uFFFD\uFFFD\u03A2\uFFFD\u0663\uFFFD\uFFFD\uFFFD\uFFFD\u01E1\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u02E3\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u02E3\uFFFD\uFFFD\uFFFD\uFFFD\u053C\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u0561\uFFFD"
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 30
+    autoContinue: 0
+    autoContinueDelay: 2
+    bgmName: Witch
+    backgroundName: 000000
+  choices: []
+  nextDialogue: {fileID: 0}
+  endsConversation: 0
+  onCompleteEventName: 
