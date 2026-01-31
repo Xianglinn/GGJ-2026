@@ -207,13 +207,23 @@ public class UIManager : MonoSingleton<UIManager>
         Canvas targetCanvas = (targetType == CanvasType.Persistent) ? PersistentCanvas : SceneCanvas;
         if (targetCanvas != null)
         {
-            // 只有当父节点不是目标 Canvas 时才重设 parent
-            // 这样可以避免一些 transform 变化带来的副作用，虽然在 Awake 里通常没问题
+            Debug.Log($"[UIManager] Panel {panelType.Name} target canvas: {targetCanvas.name} (InstanceID: {targetCanvas.GetInstanceID()})");
+            Debug.Log($"[UIManager] Panel {panelType.Name} current parent: {panel.transform.parent?.name ?? "null"}");
+
             if (panel.transform.parent != targetCanvas.transform)
             {
+                string oldParentName = panel.transform.parent?.name ?? "null";
                 panel.transform.SetParent(targetCanvas.transform, false);
-                Debug.Log($"[UIManager] Auto-reparented {panelType.Name} to {targetCanvas.name}");
+                Debug.Log($"[UIManager] Auto-reparented {panelType.Name} from {oldParentName} to {targetCanvas.name}");
             }
+            else
+            {
+                Debug.Log($"[UIManager] Panel {panelType.Name} is already a child of {targetCanvas.name}");
+            }
+        }
+        else
+        {
+            Debug.LogError($"[UIManager] Target canvas for {panelType.Name} is NULL!");
         }
 
         panel.gameObject.SetActive(false); // 默认隐藏面板
@@ -267,6 +277,10 @@ public class UIManager : MonoSingleton<UIManager>
             Debug.LogError($"[UIManager] Panel {panelType.Name} could not be cast to type {typeof(T).Name}.");
             return;
         }
+
+        // 先显示面板，再进行初始化
+        // 这样可以确保 OnInitialize 中的 StartCoroutine 等逻辑能够正常运行
+        panel.gameObject.SetActive(true);
 
         // 初始化并显示面板
         panel.OnInitialize(data);

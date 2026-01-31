@@ -27,6 +27,7 @@ public class DialogueUI : UIBasePanel<DialogueData>
     [Header("动画设置")]
     [SerializeField]
     private float fadeInDuration = 0.3f;
+    private bool isSubscribed = false;
     [SerializeField]
     private CanvasGroup canvasGroup;
     /// <summary>
@@ -70,14 +71,25 @@ public class DialogueUI : UIBasePanel<DialogueData>
             choiceButtonPrefab.gameObject.SetActive(false);
         }
         // 自动注册到 UIManager
+        RegisterToUIManager();
+        
+        // 订阅事件
+        SubscribeToEvents();
+    }
+
+    private void OnEnable()
+    {
+        RegisterToUIManager();
+        SubscribeToEvents();
+    }
+
+    private void RegisterToUIManager()
+    {
         if (UIManager.Instance != null && !UIManager.Instance.IsPanelRegistered<DialogueUI>())
         {
             UIManager.Instance.RegisterPanel(this);
-            Debug.Log("[DialogueUI] Registered self to UIManager in Awake.");
+            Debug.Log("[DialogueUI] Registered self to UIManager.");
         }
-
-        // 订阅事件（在Awake中一次性订阅，确保隐藏时也能接收消息）
-        SubscribeToEvents();
     }
 
     protected override void OnDestroy()
@@ -101,6 +113,7 @@ public class DialogueUI : UIBasePanel<DialogueData>
     }
     public override void Show()
     {
+        Debug.Log("[DialogueUI] Show() called.");
         // 确保事件已订阅
         SubscribeToEvents();
         base.Show();
@@ -115,29 +128,25 @@ public class DialogueUI : UIBasePanel<DialogueData>
     /// </summary>
     private void SubscribeToEvents()
     {
-        if (DialogueManager.Instance != null)
+        if (DialogueManager.Instance != null && !isSubscribed)
         {
-            // 先取消订阅，避免重复
-            DialogueManager.Instance.OnDialogueStarted.RemoveListener(OnDialogueStarted);
-            DialogueManager.Instance.OnLineDisplayed.RemoveListener(OnLineDisplayed);
-            DialogueManager.Instance.OnChoicesPresented.RemoveListener(OnChoicesPresented);
-            DialogueManager.Instance.OnDialogueEnded.RemoveListener(OnDialogueEnded);
-            DialogueManager.Instance.OnTypewriterSkipped.RemoveListener(OnTypewriterSkipped);
-            // 重新订阅
             DialogueManager.Instance.OnDialogueStarted.AddListener(OnDialogueStarted);
             DialogueManager.Instance.OnLineDisplayed.AddListener(OnLineDisplayed);
             DialogueManager.Instance.OnChoicesPresented.AddListener(OnChoicesPresented);
             DialogueManager.Instance.OnDialogueEnded.AddListener(OnDialogueEnded);
             DialogueManager.Instance.OnTypewriterSkipped.AddListener(OnTypewriterSkipped);
-            Debug.Log("[DialogueUI] Events subscribed.");
+            
+            isSubscribed = true;
+            Debug.Log($"[DialogueUI] Subscribed to DialogueManager instance: {DialogueManager.Instance.gameObject.GetInstanceID()}");
         }
-        else
+        else if (DialogueManager.Instance == null)
         {
-            Debug.LogError("[DialogueUI] DialogueManager.Instance is null!");
+            Debug.LogError("[DialogueUI] Failed to subscribe: DialogueManager.Instance is null!");
         }
     }
     public override void Hide()
     {
+        Debug.Log("[DialogueUI] Hide() called.");
         // 停止打字机协程
         if (_typewriterCoroutine != null)
         {
@@ -152,12 +161,16 @@ public class DialogueUI : UIBasePanel<DialogueData>
     /// </summary>
     private void OnDialogueStarted(DialogueData dialogueData)
     {
-        Debug.Log("[DialogueUI] Dialogue started.");
+        Debug.Log($"[DialogueUI] OnDialogueStarted received for: {dialogueData.dialogueID}");
         
         // 显示对话面板
         if (UIManager.Instance != null)
         {
-            UIManager.Instance.ShowPanel<DialogueUI>();
+            UIManager.Instance.ShowPanel<DialogueUI, DialogueData>(dialogueData);
+        }
+        else
+        {
+            Debug.LogError("[DialogueUI] UIManager.Instance is null in OnDialogueStarted!");
         }
         
         ClearUI();

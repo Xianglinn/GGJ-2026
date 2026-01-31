@@ -91,7 +91,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     protected override void OnInitialize()
     {
         base.OnInitialize();
-        Debug.Log("[DialogueManager] Initialized successfully.");
+        Debug.Log($"[DialogueManager] Initialized successfully. InstanceID: {gameObject.GetInstanceID()}");
     }
 
     #region 对话控制方法

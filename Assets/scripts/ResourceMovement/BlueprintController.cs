@@ -68,31 +68,30 @@ public class BlueprintController : MonoBehaviour
     }
 
     private void UpdateCompletionState(bool forceNotify){
-        bool complete = AreAllSlotsFilled();
+        bool allSlotsFilled = AreAllSlotsFilled();
+        List<SpecialEffectType> triggered = GetTriggeredEffects();
+        
+        // 判定条件：五个槽位都有物品 且 累计的物品个数超过一定数量(triggered.Count > 0)
+        bool complete = allSlotsFilled && triggered.Count > 0;
+
         if(forceNotify || complete != isComplete)
         {
             isComplete = complete;
             if(isComplete)
             {
-                // 获取触发的特效（如果有多个，取第一个或者按优先级，这里假设主要关注一个）
-                List<SpecialEffectType> triggered = GetTriggeredEffects();
-                SpecialEffectType mainEffect = SpecialEffectType.None;
+                // 获取触发的特效
+                SpecialEffectType mainEffect = triggered[0];
+                Debug.Log("ITS COMPLETE");
+                Debug.Log($"[BlueprintController] Effect triggered: {mainEffect}");
 
-                if (triggered.Count > 0)
+                // 1. 记录首次解锁一个特殊效果
+                if (DataManager.Instance != null)
                 {
-                    mainEffect = triggered[0];
-                    Debug.Log("ITS COMPLETE");
-                    Debug.Log($"[BlueprintController] Effect triggered: {mainEffect}");
-
-                    // 1. 记录首次解锁
-                    if (DataManager.Instance != null)
+                    string flagKey = "Effect_Unlocked_" + mainEffect.ToString();
+                    if (!DataManager.Instance.GetStoryFlag(flagKey))
                     {
-                        string flagKey = "Effect_Unlocked_" + mainEffect.ToString();
-                        if (!DataManager.Instance.GetStoryFlag(flagKey))
-                        {
-                            DataManager.Instance.SetStoryFlag(flagKey, true);
-                            Debug.Log($"[BlueprintController] First time unlocking effect: {mainEffect}");
-                        }
+                        DataManager.Instance.SetStoryFlag(flagKey, true);
+                        Debug.Log($"[BlueprintController] First time unlocking effect: {mainEffect}");
                     }
                 }
 

@@ -6,7 +6,7 @@ using UnityEngine;
 public class UIEpiloguePanel : UIBasePanel<object>
 {
     private bool isHandlingDialogue = false;
-    private const string COMMON_DIALOGUE_PATH = "Data/Dialogues/Epilogue_Common";
+    private const string COMMON_DIALOGUE_PATH = "Data/Dialogues/Dialogue_102";
 
     private void Awake()
     {
@@ -36,8 +36,12 @@ public class UIEpiloguePanel : UIBasePanel<object>
             isHandlingDialogue = true;
             DialogueManager.Instance.OnDialogueEnded.AddListener(OnCommonDialogueEnded);
             
-            Debug.Log("[UIEpiloguePanel] Starting Common Dialogue...");
+            Debug.Log($"[UIEpiloguePanel] Attempting to load Common Dialogue: {COMMON_DIALOGUE_PATH}");
             DialogueManager.Instance.LoadAndStartDialogue(COMMON_DIALOGUE_PATH);
+        }
+        else
+        {
+            Debug.LogError("[UIEpiloguePanel] DialogueManager.Instance is null! Cannot start dialogue.");
         }
     }
 
@@ -68,13 +72,13 @@ public class UIEpiloguePanel : UIBasePanel<object>
         switch (effect)
         {
             case SpecialEffectType.小女孩的珍藏:
-                dialoguePath = "Data/Dialogues/Epilogue_GirlCollection";
+                dialoguePath = "Data/Dialogues/Dialogue_1021";
                 break;
             case SpecialEffectType.井中之天:
-                dialoguePath = "Data/Dialogues/Epilogue_WellSky";
+                dialoguePath = "Data/Dialogues/Dialogue_1022";
                 break;
             case SpecialEffectType.魔女的面具:
-                dialoguePath = "Data/Dialogues/Epilogue_WitchMask";
+                dialoguePath = "Data/Dialogues/Dialogue_1023";
                 break;
             default:
                 Debug.Log("[UIEpiloguePanel] No special effect triggered, no branch dialogue.");

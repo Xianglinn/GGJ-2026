@@ -290,25 +290,39 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
         if (scene.name == "Scene4")
         {
             SceneManager.sceneLoaded -= OnScene4Loaded;
-            
-            // 隐藏所有其他面板
+            Debug.Log("[GameFlowManager] Scene4 loaded successfully.");
+
+            // 延迟一帧或确保 UIManager 已同步
             if (UIManager.Instance != null)
             {
+                // 隐藏所有其他面板
                 UIManager.Instance.HideAllPanels();
                 
-                 if (!UIManager.Instance.IsPanelRegistered<UIEpiloguePanel>())
+                // 确保 UIEpiloguePanel 存在并显示
+                // 它是 SceneLocal 的，通常在场景中
+                var panel = FindObjectOfType<UIEpiloguePanel>(true);
+                if (panel != null)
                 {
-                    var panel = FindObjectOfType<UIEpiloguePanel>(true);
-                    if (panel != null)
+                    if (!UIManager.Instance.IsPanelRegistered<UIEpiloguePanel>())
                     {
                         UIManager.Instance.RegisterPanel(panel);
                     }
+                    
+                    Debug.Log("[GameFlowManager] Triggering UIEpiloguePanel show...");
+                    UIManager.Instance.ShowPanel<UIEpiloguePanel, object>(null);
                 }
-
-                if (UIManager.Instance.IsPanelRegistered<UIEpiloguePanel>())
+                else
                 {
-                    UIManager.Instance.ShowPanel<UIEpiloguePanel>();
+                    Debug.LogError("[GameFlowManager] UIEpiloguePanel not found in Scene 4!");
                 }
+            }
+
+            // 清理场景 3 的遗留 UI (如果有)
+            GameObject inventoryCanvas = GameObject.Find("InventoryCanvas");
+            if (inventoryCanvas != null)
+            {
+                Destroy(inventoryCanvas);
+                Debug.Log("[GameFlowManager] Destroyed InventoryCanvas in Scene 4.");
             }
         }
     }
