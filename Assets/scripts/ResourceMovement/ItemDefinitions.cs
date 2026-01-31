@@ -15,9 +15,7 @@ public enum MaskPartType
 public enum SpecialEffectType
 {
     None = 0,
-    Fire = 1 << 0,
-    Ice = 1 << 1,
-    Wind = 1 << 2,
-    Thunder = 1 << 3,
-    Healing = 1 << 4
+    小女孩的珍藏 = 1 << 0,
+    井中之天 = 1 << 1,
+    魔女的面具 = 1 << 2
 }

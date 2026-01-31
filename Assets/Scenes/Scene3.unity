@@ -351,6 +351,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 27377017}
+  - component: {fileID: 27377018}
   m_Layer: 0
   m_Name: TrashBin
   m_TagString: Untagged
@@ -375,6 +376,20 @@ Transform:
   - {fileID: 566437258}
   m_Father: {fileID: 39110856}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &27377018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 27377016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc5423d4dd7ad674587931910dbd9a4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  binOn: {fileID: 566437257}
+  binOff: {fileID: 1940066295}
 --- !u!1 &39110855
 GameObject:
   m_ObjectHideFlags: 0
@@ -897,7 +912,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &566437258
 RectTransform:
   m_ObjectHideFlags: 0
@@ -914,7 +929,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1834, y: 990}
+  m_AnchoredPosition: {x: 1823, y: 98}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &566437259
@@ -2738,7 +2753,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1837, y: 990}
+  m_AnchoredPosition: {x: 1817, y: 94}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1940066297

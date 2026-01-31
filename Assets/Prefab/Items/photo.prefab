@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5872112921017955105
+--- !u!1 &8184703808576546716
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,27 +8,27 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8179849738910121997}
-  - component: {fileID: 1004303492181357200}
-  - component: {fileID: 6249017686378808712}
-  - component: {fileID: 1316831662952943681}
-  - component: {fileID: 4190131586732889843}
+  - component: {fileID: 1954905383666523786}
+  - component: {fileID: 2089606984479015807}
+  - component: {fileID: 4395353946557784955}
+  - component: {fileID: 1485906165207859679}
+  - component: {fileID: 2127655918238343416}
   m_Layer: 5
-  m_Name: Cat1
+  m_Name: photo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &8179849738910121997
+--- !u!224 &1954905383666523786
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5872112921017955105}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 5.1000724}
+  m_GameObject: {fileID: 8184703808576546716}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -36,24 +36,24 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 456.3449, y: 424.2721}
-  m_SizeDelta: {x: 157.335, y: 105.9312}
+  m_AnchoredPosition: {x: -477.68436, y: -184.44766}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &1004303492181357200
+--- !u!222 &2089606984479015807
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5872112921017955105}
+  m_GameObject: {fileID: 8184703808576546716}
   m_CullTransparentMesh: 1
---- !u!114 &6249017686378808712
+--- !u!114 &4395353946557784955
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5872112921017955105}
+  m_GameObject: {fileID: 8184703808576546716}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 49e3205efbf8ab4469e1eb2b6c6fee87, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -77,33 +77,33 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1316831662952943681
+--- !u!114 &1485906165207859679
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5872112921017955105}
+  m_GameObject: {fileID: 8184703808576546716}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4190131586732889843
+--- !u!114 &2127655918238343416
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5872112921017955105}
+  m_GameObject: {fileID: 8184703808576546716}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e74a724fb6286ea428c269516f549183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemId: cat1
-  descriptionCN: "\u4E00\u53EA\u53EF\u7231\u7684\u732B\u732B\u73A9\u5076"
-  partType: 0
+  itemId: photo
+  descriptionCN: "\u9B54\u5973\u548C\u5C11\u4E3B\u7684\u5408\u5F71\u3002"
+  partType: 2
   isProcessed: 0
   canBeProcessed: 0
-  specialEffects: 0
+  specialEffects: 4
