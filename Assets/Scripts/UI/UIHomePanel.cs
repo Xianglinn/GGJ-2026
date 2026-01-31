@@ -9,6 +9,8 @@ public class UIHomePanel : UIBasePanel<object>, IPointerClickHandler
 {
     [Header("UI References")]
     [SerializeField] private Text hintText;
+    [SerializeField] private Button toScene5Btn;
+
     private void Awake()
     {
         // 自动注册到 UIManager
@@ -19,6 +21,22 @@ public class UIHomePanel : UIBasePanel<object>, IPointerClickHandler
             // 因为 UIHomePanel 需要一直激活来监听输入
             gameObject.SetActive(true);
         }
+
+        if (toScene5Btn != null)
+        {
+            toScene5Btn.onClick.AddListener(OnToScene5BtnClicked);
+        }
+        else
+        {
+             // 尝试查找
+            var btnObj = GameObject.Find("ToScene5Btn");
+            if (btnObj != null) 
+            {
+                toScene5Btn = btnObj.GetComponent<Button>();
+                toScene5Btn.onClick.AddListener(OnToScene5BtnClicked);
+            }
+        }
+
         Debug.Log("[UIHomePanel] Awake called");
     }
     
@@ -41,10 +59,26 @@ public class UIHomePanel : UIBasePanel<object>, IPointerClickHandler
     private void Update()
     {
         // 检测任意键盘按键
+        // 检测任意键盘按键，但排除鼠标点击（防止点击按钮时误触发）
         if (Input.anyKeyDown)
         {
+            // 如果是鼠标按键，则忽略（交给 OnPointerClick 或 按钮自身的事件处理）
+            if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2))
+            {
+                return;
+            }
+
             Debug.Log("[UIHomePanel] Key detected! Triggering transition...");
             TriggerSceneTransition();
+        }
+    }
+
+    private void OnToScene5BtnClicked()
+    {
+        Debug.Log("[UIHomePanel] To Scene5 Clicked");
+         if (GameFlowManager.Instance != null)
+        {
+            GameFlowManager.Instance.SwitchState(GameState.LevelMap);
         }
     }
 
