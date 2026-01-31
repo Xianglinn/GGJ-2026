@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 // 背包槽位：接收拖拽物品
-public class InventorySlot : MonoBehaviour, IDropHandler
+public class InventorySlot : MonoBehaviour, IDropHandler, ISlot
 {
     private DragByInterface currentItem; // 当前物品
     [SerializeField] private bool destroySourceOnDrop; // 放入后销毁源物体（用于场景拾取）
