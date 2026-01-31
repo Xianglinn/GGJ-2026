@@ -284,7 +284,35 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     private void HandleLevelMapState()
     {
         Debug.Log("[GameFlowManager] Entering LevelMap state");
-        // TODO: 加载或激活关卡地图场景
+        LoadScene("Scene5");
+        SceneManager.sceneLoaded += OnScene5Loaded;
+    }
+
+    private void OnScene5Loaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Scene5")
+        {
+            SceneManager.sceneLoaded -= OnScene5Loaded;
+            
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.HideAllPanels();
+                
+                 if (!UIManager.Instance.IsPanelRegistered<UILevelMapPanel>())
+                {
+                    var panel = FindObjectOfType<UILevelMapPanel>(true);
+                    if (panel != null)
+                    {
+                        UIManager.Instance.RegisterPanel(panel);
+                    }
+                }
+
+                if (UIManager.Instance.IsPanelRegistered<UILevelMapPanel>())
+                {
+                    UIManager.Instance.ShowPanel<UILevelMapPanel>();
+                }
+            }
+        }
     }
 
     #endregion
