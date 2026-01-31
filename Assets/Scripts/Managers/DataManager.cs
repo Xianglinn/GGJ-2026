@@ -12,6 +12,7 @@ public class GameSaveData
     public int currentLevel = 0;
     public List<string> unlockedLevels = new List<string>();
     public List<string> collectedItems = new List<string>();
+    public List<InventoryItemState> inventoryItems = new List<InventoryItemState>();
     public Dictionary<string, bool> storyFlags = new Dictionary<string, bool>();
     public float musicVolume = 0.7f;
     public float sfxVolume = 1f;
@@ -315,6 +316,27 @@ public class DataManager : MonoSingleton<DataManager>
     public bool HasCollectedItem(string itemName)
     {
         return _currentData.collectedItems.Contains(itemName);
+    }
+
+    /// <summary>
+    /// 设置背包数据（用于场景2->场景3）
+    /// </summary>
+    public void SetInventoryItems(List<InventoryItemState> items)
+    {
+        _currentData.inventoryItems.Clear();
+        if(items == null)
+        {
+            return;
+        }
+        _currentData.inventoryItems.AddRange(items);
+    }
+
+    /// <summary>
+    /// 获取背包数据
+    /// </summary>
+    public List<InventoryItemState> GetInventoryItems()
+    {
+        return new List<InventoryItemState>(_currentData.inventoryItems);
     }
 
     /// <summary>

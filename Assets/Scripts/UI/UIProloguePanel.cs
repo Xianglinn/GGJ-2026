@@ -86,6 +86,11 @@ public class UIProloguePanel : UIBasePanel<object>
         Debug.Log("[UIProloguePanel] toScene3Btn clicked, switching to Gameplay state");
         if (GameFlowManager.Instance != null)
         {
+            InventoryPanelSync panelSync = FindObjectOfType<InventoryPanelSync>(true);
+            if(panelSync != null)
+            {
+                panelSync.SaveToManager();
+            }
             GameFlowManager.Instance.SwitchState(GameState.Gameplay);
         }
         else
