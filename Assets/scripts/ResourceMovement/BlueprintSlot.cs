@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 // 蓝图槽位：只接收指定部件类型
-public class BlueprintSlot : MonoBehaviour, IDropHandler
+public class BlueprintSlot : MonoBehaviour, IDropHandler, ISlot
 {
     [SerializeField] private MaskPartType allowedPart; // 允许的部件类型
     private DragByInterface currentItem; // 当前槽位物品
