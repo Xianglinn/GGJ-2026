@@ -29,7 +29,17 @@ public class TrashBinDrop : MonoBehaviour, IDropHandler, IPointerEnterHandler, I
         }
 
         DragByInterface dragItem = eventData.pointerDrag.GetComponent<DragByInterface>();
-        if(dragItem != null)
+        ItemInfo itemInfo = eventData.pointerDrag.GetComponent<ItemInfo>();
+        if(itemInfo == null)
+        {
+            itemInfo = eventData.pointerDrag.GetComponentInParent<ItemInfo>();
+        }
+        if(itemInfo == null)
+        {
+            itemInfo = eventData.pointerDrag.GetComponentInChildren<ItemInfo>();
+        }
+
+        if(dragItem != null && itemInfo != null)
         {
             Destroy(dragItem.gameObject);
         }
