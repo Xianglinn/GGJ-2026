@@ -26,7 +26,11 @@ public class BlueprintSlot : MonoBehaviour, IDropHandler
             return;
         }
 
-        ItemInfo info = GetItemInfoFrom(dragItem);
+        ItemInfo info = dragItem.ItemInfo;
+        if(info == null)
+        {
+            info = GetItemInfoFrom(dragItem);
+        }
         if(info == null || info.PartType != allowedPart)
         {
             return;
@@ -37,7 +41,11 @@ public class BlueprintSlot : MonoBehaviour, IDropHandler
     }
 
     public ItemInfo GetItemInfo(){
-        return currentItem != null ? GetItemInfoFrom(currentItem) : null;
+        if(currentItem == null)
+        {
+            return null;
+        }
+        return currentItem.ItemInfo != null ? currentItem.ItemInfo : GetItemInfoFrom(currentItem);
     }
 
     public void ClearItem(DragByInterface item){

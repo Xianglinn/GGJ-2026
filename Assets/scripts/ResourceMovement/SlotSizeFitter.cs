@@ -10,6 +10,12 @@ public class SlotSizeFitter : MonoBehaviour
             return;
         }
 
+        DragByInterface dragItem = itemTransform.GetComponent<DragByInterface>();
+        if(dragItem != null)
+        {
+            itemRect.localScale = dragItem.OriginalScale;
+        }
+
         Vector2 slotSize = slotRect.rect.size;
         Vector2 itemSize = itemRect.rect.size;
         if(itemSize.x <= 0f || itemSize.y <= 0f)
@@ -21,7 +27,6 @@ public class SlotSizeFitter : MonoBehaviour
         float scaleY = slotSize.y / itemSize.y;
         float scaleFactor = Mathf.Min(scaleX, scaleY);
         Vector3 baseScale = itemRect.localScale;
-        DragByInterface dragItem = itemTransform.GetComponent<DragByInterface>();
         if(dragItem != null)
         {
             baseScale = dragItem.OriginalScale;
