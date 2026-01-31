@@ -1,7 +1,9 @@
 using UnityEngine;
 
+// 将物品缩放到槽位尺寸
 public class SlotSizeFitter : MonoBehaviour
 {
+    // 根据槽位大小适配物品
     public void Fit(Transform itemTransform){
         RectTransform slotRect = transform as RectTransform;
         RectTransform itemRect = itemTransform as RectTransform;
