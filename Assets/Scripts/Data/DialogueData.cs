@@ -31,6 +31,13 @@ public class DialogueLine
 
     [Tooltip("自动继续延迟（秒）")]
     public float autoContinueDelay = 2f;
+
+    [Header("环境设置")]
+    [Tooltip("BGM 名称")]
+    public string bgmName;
+
+    [Tooltip("背景图名称")]
+    public string backgroundName;
 }
 
 /// <summary>

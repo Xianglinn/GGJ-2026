@@ -197,6 +197,9 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
                 if (UIManager.Instance.IsPanelRegistered<UIProloguePanel>())
                 {
                     UIManager.Instance.ShowPanel<UIProloguePanel>();
+                    
+                    // 触发新手教程对话
+                    CheckAndStartScene2Tutorial();
                 }
                 else
                 {
@@ -204,6 +207,32 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// 检查并开始 Scene2 新手教程
+    /// </summary>
+    private void CheckAndStartScene2Tutorial()
+    {
+        if (DataManager.Instance == null || DialogueManager.Instance == null) return;
+
+        bool isTutorialCompleted = DataManager.Instance.GetStoryFlag("Scene2_Tutorial_Completed");
+        if (!isTutorialCompleted)
+        {
+            Debug.Log("[GameFlowManager] Starting Scene2 Tutorial...");
+            // 延迟启动对话，确保所有系统初始化完成
+            StartCoroutine(StartTutorialDialogueDelayed());
+        }
+    }
+
+    /// <summary>
+    /// 延迟启动教程对话
+    /// </summary>
+    private System.Collections.IEnumerator StartTutorialDialogueDelayed()
+    {
+        yield return new WaitForSeconds(0.5f);
+        DialogueManager.Instance.LoadAndStartDialogue("Data/Dialogues/Dialogue_101");
+        DataManager.Instance.SetStoryFlag("Scene2_Tutorial_Completed", true);
     }
 
     private void HandleGameplayState()
