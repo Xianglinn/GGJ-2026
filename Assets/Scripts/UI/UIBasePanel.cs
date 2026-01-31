@@ -14,7 +14,34 @@ public enum CanvasType
     SceneLocal  // 场景本地 Canvas (随场景销毁)
 }
 
-public class UIBasePanel<T> : MonoBehaviour where T : class
+/// <summary>
+/// UI 面板非泛型基类，用于 UIManager 统一管理
+/// </summary>
+public abstract class UIBasePanel : MonoBehaviour
+{
+    /// <summary>
+    /// 面板所属的 Canvas 类型
+    /// </summary>
+    public virtual CanvasType PanelCanvasType => CanvasType.SceneLocal;
+
+    /// <summary>
+    /// 面板是否应该阻挡射线（用于 UIManager 统一控制交互）
+    /// 悬浮提示等面板应重写此属性返回 false
+    /// </summary>
+    public virtual bool BlocksRaycasts => true;
+
+    /// <summary>
+    /// 显示面板
+    /// </summary>
+    public abstract void Show();
+
+    /// <summary>
+    /// 隐藏面板
+    /// </summary>
+    public abstract void Hide();
+}
+
+public class UIBasePanel<T> : UIBasePanel where T : class
 {
     /// <summary>
     /// 面板是否已初始化
@@ -34,7 +61,7 @@ public class UIBasePanel<T> : MonoBehaviour where T : class
     /// <summary>
     /// 面板所属的 Canvas 类型
     /// </summary>
-    public virtual CanvasType PanelCanvasType => CanvasType.SceneLocal;
+    public override CanvasType PanelCanvasType => CanvasType.SceneLocal;
 
     /// <summary>
     /// 初始化面板并传入数据
@@ -57,7 +84,7 @@ public class UIBasePanel<T> : MonoBehaviour where T : class
     /// <summary>
     /// 显示面板
     /// </summary>
-    public virtual void Show()
+    public override void Show()
     {
         if (!isInitialized)
         {
@@ -76,7 +103,7 @@ public class UIBasePanel<T> : MonoBehaviour where T : class
     /// <summary>
     /// 隐藏面板
     /// </summary>
-    public virtual void Hide()
+    public override void Hide()
     {
         if (!isVisible)
         {

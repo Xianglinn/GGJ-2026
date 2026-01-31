@@ -44,6 +44,11 @@ public class BlueprintSlot : MonoBehaviour, IDropHandler, ISlot
         NotifySlotChanged();
     }
 
+    public void SetItem(DragByInterface item){
+        currentItem = item;
+        NotifySlotChanged();
+    }
+
     // 读取当前物品信息
     public ItemInfo GetItemInfo(){
         if(currentItem == null)

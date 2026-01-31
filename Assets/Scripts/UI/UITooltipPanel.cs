@@ -19,6 +19,9 @@ public class UITooltipPanel : UIBasePanel<string>
     // 确保显示在 Persistent Canvas 最顶层
     public override CanvasType PanelCanvasType => CanvasType.Persistent;
 
+    // 悬浮提示不阻挡射线，防止闪烁
+    public override bool BlocksRaycasts => false;
+
     public override void OnInitialize(string data)
     {
         base.OnInitialize(data);

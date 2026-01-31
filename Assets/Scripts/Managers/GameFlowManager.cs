@@ -81,6 +81,12 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
 
         Debug.Log($"[GameFlowManager] Switching state: {_previousState} -> {_currentState}");
 
+        // 如果从 Gameplay 状态切出，将场景中的物品收回背包，防止丢失
+        if (_previousState == GameState.Gameplay)
+        {
+            ReturnWorldItemsToInventory();
+        }
+
         // 触发状态切换事件
         StateChanged?.Invoke(_previousState, _currentState);
 
@@ -386,4 +392,61 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     }
 
     #endregion
+
+    /// <summary>
+    /// 将工作台和蓝图中的物品收回背包，防止场景销毁
+    /// </summary>
+    private void ReturnWorldItemsToInventory()
+    {
+        GameObject inventoryCanvas = GameObject.Find("InventoryCanvas");
+        if (inventoryCanvas == null)
+        {
+            Debug.LogWarning("[GameFlowManager] InventoryCanvas not found. Cannot return items.");
+            return;
+        }
+
+        // 获取所有背包槽位
+        InventorySlot[] allSlots = inventoryCanvas.GetComponentsInChildren<InventorySlot>(true);
+        if (allSlots == null || allSlots.Length == 0) return;
+
+        // 遍历所有物品实例
+        var instances = new System.Collections.Generic.List<DragByInterface>(DragByInterface.AllInstances);
+        foreach (var item in instances)
+        {
+            if (item == null || item.gameObject == null) continue;
+
+            // 检查物品是否在场景本地插槽中（工作台或蓝图）
+            bool isInWorldSlot = false;
+            Transform p = item.transform.parent;
+            if (p != null)
+            {
+                if (p.GetComponent<WorkBenchSlot>() != null || p.GetComponent<BlueprintSlot>() != null)
+                {
+                    isInWorldSlot = true;
+                }
+            }
+
+            if (isInWorldSlot)
+            {
+                // 寻找空背包槽位
+                bool foundSlot = false;
+                foreach (var slot in allSlots)
+                {
+                    if (slot.GetItemInfo() == null)
+                    {
+                        item.PlaceInSlot(slot.transform);
+                        slot.SetItem(item);
+                        Debug.Log($"[GameFlowManager] Auto-returned {item.name} to inventory slot {slot.name}");
+                        foundSlot = true;
+                        break;
+                    }
+                }
+
+                if (!foundSlot)
+                {
+                    Debug.LogWarning($"[GameFlowManager] No empty slot for {item.name}! Item might be lost.");
+                }
+            }
+        }
+    }
 }

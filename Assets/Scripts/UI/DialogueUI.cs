@@ -167,6 +167,10 @@ public class DialogueUI : UIBasePanel<DialogueData>
         if (UIManager.Instance != null)
         {
             UIManager.Instance.ShowPanel<DialogueUI, DialogueData>(dialogueData);
+            
+            // 禁用其他 UI 交互，并隐藏提示框
+            UIManager.Instance.SetAllPanelsInteraction(false, typeof(DialogueUI));
+            UIManager.Instance.HidePanel<UITooltipPanel>();
         }
         else
         {
@@ -237,10 +241,12 @@ public class DialogueUI : UIBasePanel<DialogueData>
     /// </summary>
     private void OnDialogueEnded()
     {
-        Debug.Log("[DialogueUI] Dialogue ended.");
-        // 隐藏面板
+        Debug.Log("[DialogueUI] OnDialogueEnded received.");
+        
+        // 恢复其他 UI 交互
         if (UIManager.Instance != null)
         {
+            UIManager.Instance.SetAllPanelsInteraction(true);
             UIManager.Instance.HidePanel<DialogueUI>();
         }
     }

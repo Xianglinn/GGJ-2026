@@ -497,4 +497,31 @@ public class UIManager : MonoSingleton<UIManager>
 
         return false;
     }
+    /// <summary>
+    /// 设置所有已注册面板的交互状态
+    /// </summary>
+    /// <param name="interactable">是否可交互</param>
+    /// <param name="excludeType">排除的面板类型（可选）</param>
+    public void SetAllPanelsInteraction(bool interactable, System.Type excludeType = null)
+    {
+        foreach (var kvp in _registeredPanels)
+        {
+            if (excludeType != null && kvp.Key == excludeType) continue;
+            
+            if (kvp.Value != null)
+            {
+                UIBasePanel panel = kvp.Value as UIBasePanel;
+                CanvasGroup cg = kvp.Value.GetComponent<CanvasGroup>();
+                if (cg == null)
+                {
+                    cg = kvp.Value.gameObject.AddComponent<CanvasGroup>();
+                }
+                
+                cg.interactable = interactable;
+                // 只有在面板本身允许阻挡射线时，才根据状态开启 blocksRaycasts
+                cg.blocksRaycasts = interactable && (panel == null || panel.BlocksRaycasts);
+            }
+        }
+        Debug.Log($"[UIManager] All panels interaction set to: {interactable} (Excluded: {excludeType?.Name ?? "None"})");
+    }
 }

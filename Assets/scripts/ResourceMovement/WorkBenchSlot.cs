@@ -31,6 +31,10 @@ public class WorkBenchSlot : MonoBehaviour, IDropHandler, ISlot
         currentItem = dragItem;
     }
 
+    public void SetItem(DragByInterface item){
+        currentItem = item;
+    }
+
     // 清空占位（用于拖出）
     public void ClearItem(DragByInterface item){
         if(currentItem == item)

@@ -13,26 +13,32 @@ public class SlotSizeFitter : MonoBehaviour
         }
 
         DragByInterface dragItem = itemTransform.GetComponent<DragByInterface>();
+        Vector3 baseScale = Vector3.one;
         if(dragItem != null)
         {
-            itemRect.localScale = dragItem.OriginalScale;
+            baseScale = dragItem.OriginalScale;
+        }
+        else
+        {
+            baseScale = itemRect.localScale;
         }
 
         Vector2 slotSize = slotRect.rect.size;
         Vector2 itemSize = itemRect.rect.size;
+        
         if(itemSize.x <= 0f || itemSize.y <= 0f)
         {
             return;
         }
 
+        // 计算适配比例
         float scaleX = slotSize.x / itemSize.x;
         float scaleY = slotSize.y / itemSize.y;
         float scaleFactor = Mathf.Min(scaleX, scaleY);
-        Vector3 baseScale = itemRect.localScale;
-        if(dragItem != null)
-        {
-            baseScale = dragItem.OriginalScale;
-        }
+
+        // 设置本地缩放
         itemRect.localScale = baseScale * scaleFactor;
+        
+        Debug.Log($"[SlotSizeFitter] Fitting {itemTransform.name} into {transform.name}. SlotSize: {slotSize}, ItemSize: {itemSize}, ScaleFactor: {scaleFactor}");
     }
 }
