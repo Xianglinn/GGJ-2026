@@ -9,7 +9,7 @@ public class DialogueImportTool : EditorWindow
     private const string SAVE_PATH = "Assets/Resources/Data/Dialogues/";
     private const string PORTRAIT_PATH = "Resources/Sprites/Portraits/";
 
-    [MenuItem("Tools/Dialogue/Import From CSV")]
+    [MenuItem("Tools/对话系统/Import From CSV")]
     public static void ImportFromCSV()
     {
         string filePath = EditorUtility.OpenFilePanel("Select Dialogue CSV", "", "csv");
