@@ -11,8 +11,11 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private Vector2 startAnchoredPosition;
     private bool wasDropped;
     private Vector3 originalScale;
+    private Vector3 startScale;
+    private ItemInfo cachedItemInfo;
 
     public Vector3 OriginalScale => originalScale;
+    public ItemInfo ItemInfo => cachedItemInfo;
 
     private void Awake(){
         rectTransform = GetComponent<RectTransform>();
@@ -30,6 +33,7 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             originalScale = rectTransform.localScale;
         }
+        RefreshItemInfo();
     }
 
     private void Start(){
@@ -47,8 +51,11 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         }
 
         wasDropped = false;
+        RefreshItemInfo();
         startParent = transform.parent;
         startAnchoredPosition = rectTransform.anchoredPosition;
+        startScale = rectTransform.localScale;
+        rectTransform.localScale = originalScale;
         if(startParent != null)
         {
             InventorySlot inventorySlot = startParent.GetComponent<InventorySlot>();
@@ -91,6 +98,7 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             transform.SetParent(startParent, false);
             rectTransform.anchoredPosition = startAnchoredPosition;
+            rectTransform.localScale = startScale;
         }
     }
 
@@ -117,6 +125,18 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             Vector2 size = rectTransform.rect.size;
             Vector2 pivotOffset = (new Vector2(0.5f, 0.5f) - rectTransform.pivot) * size;
             rectTransform.anchoredPosition = localPoint + pivotOffset;
+        }
+    }
+
+    private void RefreshItemInfo(){
+        cachedItemInfo = GetComponent<ItemInfo>();
+        if(cachedItemInfo == null)
+        {
+            cachedItemInfo = GetComponentInParent<ItemInfo>();
+        }
+        if(cachedItemInfo == null)
+        {
+            cachedItemInfo = GetComponentInChildren<ItemInfo>();
         }
     }
 }
