@@ -23,6 +23,13 @@ public class ItemInfo : MonoBehaviour
     public bool CanBeProcessed => canBeProcessed;
     public SpecialEffectType SpecialEffects => specialEffects;
 
+    private void Start(){
+        if(InventoryManager.Instance != null && InventoryManager.Instance.HasItem(ItemId))
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
     // 设置加工状态
     public void SetProcessed(bool processed){
         if(canBeProcessed)

@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 6249017686378808712}
   - component: {fileID: 1316831662952943681}
   - component: {fileID: 4190131586732889843}
+  - component: {fileID: 1892010594197725737}
   m_Layer: 5
-  m_Name: CatToy
+  m_Name: Cat1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -107,3 +108,17 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 0
+--- !u!114 &1892010594197725737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5872112921017955105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac4b1588a411747498ec7268de394418, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemInfo: {fileID: 0}
+  isInventoryItem: 0
