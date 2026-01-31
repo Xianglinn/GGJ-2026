@@ -52,6 +52,11 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     public UnityEvent OnDialogueEnded = new UnityEvent();
 
     /// <summary>
+    /// 背景切换事件（参数：背景名称）
+    /// </summary>
+    public UnityEvent<string> OnBackgroundChanged = new UnityEvent<string>();
+
+    /// <summary>
     /// 打字机跳过事件
     /// </summary>
     public UnityEvent OnTypewriterSkipped = new UnityEvent();
@@ -178,10 +183,21 @@ public class DialogueManager : MonoSingleton<DialogueManager>
             {
                 AudioManager.Instance.PlaySFX(currentLine.voiceClip);
             }
-            else
+        }
+
+        // 播放背景音乐（如果有）
+        if (!string.IsNullOrEmpty(currentLine.bgmName))
+        {
+            if (AudioManager.Instance != null)
             {
-                Debug.LogWarning("[DialogueManager] AudioManager not found. Voice clip will not play.");
+                AudioManager.Instance.PlayMusicByName(currentLine.bgmName);
             }
+        }
+
+        // 切换背景图（如果有）
+        if (!string.IsNullOrEmpty(currentLine.backgroundName))
+        {
+            OnBackgroundChanged?.Invoke(currentLine.backgroundName);
         }
 
         // 触发显示对话行事件
@@ -216,19 +232,20 @@ public class DialogueManager : MonoSingleton<DialogueManager>
     {
         if (!_isDialogueActive)
         {
-            Debug.LogWarning("[DialogueManager] No active dialogue.");
+            Debug.LogWarning("[DialogueManager] ShowNextLine ignored: No active dialogue.");
             return;
         }
 
         if (!_waitingForInput)
         {
-            Debug.LogWarning("[DialogueManager] Not ready for next line yet.");
+            Debug.LogWarning($"[DialogueManager] ShowNextLine ignored: Not waiting for input. _waitingForInput={_waitingForInput}");
             return;
         }
 
         _waitingForInput = false;
         _currentLineIndex++;
 
+        Debug.Log($"[DialogueManager] ShowNextLine proceeding to index {_currentLineIndex}");
         ShowCurrentLine();
     }
 

@@ -197,19 +197,82 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
                 if (UIManager.Instance.IsPanelRegistered<UIProloguePanel>())
                 {
                     UIManager.Instance.ShowPanel<UIProloguePanel>();
-                }
-                else
-                {
-                    Debug.LogWarning("[GameFlowManager] UIProloguePanel not registered. Please ensure it's in the scene.");
+                    
+                    // 触发新手教程对话
+                    CheckAndStartScene2Tutorial();
                 }
             }
         }
     }
 
+    /// <summary>
+    /// 检查并开始 Scene2 新手教程
+    /// </summary>
+    private void CheckAndStartScene2Tutorial()
+    {
+        if (DataManager.Instance == null || DialogueManager.Instance == null) return;
+
+        bool isTutorialCompleted = DataManager.Instance.GetStoryFlag("Scene2_Tutorial_Completed");
+        if (!isTutorialCompleted)
+        {
+            Debug.Log("[GameFlowManager] Starting Scene2 Tutorial...");
+            // 延迟启动对话，确保所有系统初始化完成
+            StartCoroutine(StartTutorialDialogueDelayed());
+        }
+    }
+
+    /// <summary>
+    /// 延迟启动教程对话
+    /// </summary>
+    private System.Collections.IEnumerator StartTutorialDialogueDelayed()
+    {
+        yield return new WaitForSeconds(0.5f);
+        DialogueManager.Instance.LoadAndStartDialogue("Data/Dialogues/Dialogue_101");
+        DataManager.Instance.SetStoryFlag("Scene2_Tutorial_Completed", true);
+    }
+
     private void HandleGameplayState()
     {
         Debug.Log("[GameFlowManager] Entering Gameplay state");
-        // TODO: 加载或激活核心玩法（场景2/3）
+        
+        // 加载 Scene3
+        LoadScene("Scene3");
+        
+        // 场景加载完成后处理逻辑
+        SceneManager.sceneLoaded += OnScene3Loaded;
+    }
+
+  
+    
+    private void OnScene3Loaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Scene3")
+        {
+            SceneManager.sceneLoaded -= OnScene3Loaded;
+            
+            // 隐藏所有其他面板
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.HideAllPanels();
+                
+                // 尝试查找并注册（如果尚未注册，可能是因为物体默认隐藏导致 Awake 未执行）
+                if (!UIManager.Instance.IsPanelRegistered<UIGameplayPanel>())
+                {
+                    var panel = FindObjectOfType<UIGameplayPanel>(true); // true = include inactive
+                    if (panel != null)
+                    {
+                        UIManager.Instance.RegisterPanel(panel);
+                    }
+                }
+
+                // 显示玩法面板
+                if (UIManager.Instance.IsPanelRegistered<UIGameplayPanel>())
+                {
+                    UIManager.Instance.ShowPanel<UIGameplayPanel>();
+                    
+                }
+            }
+        }
     }
 
     private void HandleEpilogueState()

@@ -115,6 +115,29 @@ public class AudioManager : MonoSingleton<AudioManager>
     }
 
     /// <summary>
+    /// 通过名称播放背景音乐（从 Resources/Audio/BGM 加载）
+    /// </summary>
+    /// <param name="musicName">音乐名称</param>
+    /// <param name="fadeTime">淡入时间</param>
+    public void PlayMusicByName(string musicName, float fadeTime = 1f)
+    {
+        if (string.IsNullOrEmpty(musicName)) return;
+
+        // 如果已经在播放该音乐，则跳过
+        if (_musicSource.clip != null && _musicSource.clip.name == musicName) return;
+
+        AudioClip clip = Resources.Load<AudioClip>("Audio/BGM/" + musicName);
+        if (clip != null)
+        {
+            PlayMusic(clip, fadeTime);
+        }
+        else
+        {
+            Debug.LogWarning($"[AudioManager] Music clip not found at Resources/Audio/BGM/{musicName}");
+        }
+    }
+
+    /// <summary>
     /// 停止背景音乐
     /// </summary>
     /// <param name="fadeTime">淡出时间（秒）</param>

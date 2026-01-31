@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed681275848b42d45b1c0a193d3e8337, type: 3}
+  m_Name: Dialogue_102
+  m_EditorClassIdentifier: 
+  dialogueID: 102
+  lines:
+  - characterName: "\u4E3B\u89D2"
+    characterPortrait: {fileID: 0}
+    dialogueText: "\u8FD9\u91CC\u53D1\u751F\u4E86\u4EC0\u4E48\uFF1F"
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 30
+    autoContinue: 0
+    autoContinueDelay: 2
+    bgmName: 
+    backgroundName: Forest_Day
+  choices: []
+  nextDialogue: {fileID: 0}
+  endsConversation: 0
+  onCompleteEventName: 
