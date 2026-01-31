@@ -19,6 +19,21 @@ public class InventoryManager : MonoSingleton<InventoryManager>
         return new List<InventoryItemState>(items);
     }
 
+    public bool HasItem(string itemId){
+        if(string.IsNullOrEmpty(itemId))
+        {
+            return false;
+        }
+        for(int i = 0; i < items.Count; i++)
+        {
+            if(items[i].itemId == itemId)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void Clear(){
         items.Clear();
     }

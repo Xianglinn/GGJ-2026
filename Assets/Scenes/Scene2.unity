@@ -573,6 +573,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 32184800}
     m_Modifications:
+    - target: {fileID: 4190131586732889843, guid: 96ac9cdbed52f894b8612df37a7508dd, type: 3}
+      propertyPath: hideIfCollectedInScene2
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5872112921017955105, guid: 96ac9cdbed52f894b8612df37a7508dd, type: 3}
       propertyPath: m_Name
       value: CatToy
