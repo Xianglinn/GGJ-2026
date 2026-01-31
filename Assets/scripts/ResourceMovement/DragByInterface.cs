@@ -3,33 +3,108 @@ using UnityEngine.EventSystems;
 
 public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    private Vector2 startPosition; // 初始位置
-    private bool isDragging; // 是否正在拖拽
+    private RectTransform rectTransform;
+    private Canvas parentCanvas;
+    private RectTransform canvasRect;
+    private CanvasGroup canvasGroup;
+    private Transform startParent;
+    private Vector2 startAnchoredPosition;
+    private bool wasDropped;
 
-    // 缓存初始位置
+    private void Awake(){
+        rectTransform = GetComponent<RectTransform>();
+        parentCanvas = GetComponentInParent<Canvas>();
+        if(parentCanvas != null)
+        {
+            canvasRect = parentCanvas.GetComponent<RectTransform>();
+        }
+        canvasGroup = GetComponent<CanvasGroup>();
+        if(canvasGroup == null)
+        {
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
+    }
+
     private void Start(){
-        startPosition = transform.position;
+        startParent = transform.parent;
+        if(rectTransform != null)
+        {
+            startAnchoredPosition = rectTransform.anchoredPosition;
+        }
     }
 
-    // 开始拖拽
     public void OnBeginDrag(PointerEventData eventData){
-        isDragging = true;
-    }
-
-    // 拖拽中更新位置
-    public void OnDrag(PointerEventData eventData){
-        if(!isDragging)
+        if(rectTransform == null)
         {
             return;
         }
-        Debug.Log("draggging?");
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
-        transform.position = new Vector2(worldPos.x, worldPos.y);
+
+        wasDropped = false;
+        startParent = transform.parent;
+        startAnchoredPosition = rectTransform.anchoredPosition;
+        if(startParent != null)
+        {
+            InventorySlot inventorySlot = startParent.GetComponent<InventorySlot>();
+            if(inventorySlot != null)
+            {
+                inventorySlot.ClearItem(this);
+            }
+            WorkBenchSlot workBenchSlot = startParent.GetComponent<WorkBenchSlot>();
+            if(workBenchSlot != null)
+            {
+                workBenchSlot.ClearItem(this);
+            }
+        }
+        if(parentCanvas != null)
+        {
+            transform.SetParent(parentCanvas.transform, true);
+            transform.SetAsLastSibling();
+            CenterOnPointer(eventData);
+        }
+        canvasGroup.blocksRaycasts = false;
     }
 
-    // 结束拖拽
+    public void OnDrag(PointerEventData eventData){
+        if(parentCanvas == null)
+        {
+            return;
+        }
+
+        rectTransform.anchoredPosition += eventData.delta / parentCanvas.scaleFactor;
+    }
+
     public void OnEndDrag(PointerEventData eventData){
-        isDragging = false;
-        transform.position = startPosition;
+        canvasGroup.blocksRaycasts = true;
+        if(!wasDropped)
+        {
+            transform.SetParent(startParent, false);
+            rectTransform.anchoredPosition = startAnchoredPosition;
+        }
+    }
+
+    public void PlaceInSlot(Transform slotTransform){
+        wasDropped = true;
+        transform.SetParent(slotTransform, false);
+        rectTransform.anchoredPosition = Vector2.zero;
+        SlotSizeFitter fitter = slotTransform.GetComponent<SlotSizeFitter>();
+        if(fitter != null)
+        {
+            fitter.Fit(transform);
+        }
+    }
+
+    private void CenterOnPointer(PointerEventData eventData){
+        if(canvasRect == null)
+        {
+            return;
+        }
+
+        Vector2 localPoint;
+        if(RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, eventData.position, eventData.pressEventCamera, out localPoint))
+        {
+            Vector2 size = rectTransform.rect.size;
+            Vector2 pivotOffset = (new Vector2(0.5f, 0.5f) - rectTransform.pivot) * size;
+            rectTransform.anchoredPosition = localPoint + pivotOffset;
+        }
     }
 }
