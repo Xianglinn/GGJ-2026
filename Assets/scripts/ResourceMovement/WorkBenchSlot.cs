@@ -4,10 +4,8 @@ using UnityEngine.EventSystems;
 public class WorkBenchSlot : MonoBehaviour, IDropHandler
 {
     private DragByInterface currentItem;
-    private SlotSizeFitter sizeFitter;
 
     private void Awake(){
-        sizeFitter = GetComponent<SlotSizeFitter>();
     }
 
     public void OnDrop(PointerEventData eventData){
@@ -29,10 +27,6 @@ public class WorkBenchSlot : MonoBehaviour, IDropHandler
 
         dragItem.PlaceInSlot(transform);
         currentItem = dragItem;
-        if(sizeFitter != null)
-        {
-            sizeFitter.Fit(dragItem.transform);
-        }
     }
 
     public void ClearItem(DragByInterface item){

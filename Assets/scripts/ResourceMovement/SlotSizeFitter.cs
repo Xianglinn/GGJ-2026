@@ -20,6 +20,12 @@ public class SlotSizeFitter : MonoBehaviour
         float scaleX = slotSize.x / itemSize.x;
         float scaleY = slotSize.y / itemSize.y;
         float scaleFactor = Mathf.Min(scaleX, scaleY);
-        itemRect.localScale = Vector3.one * scaleFactor;
+        Vector3 baseScale = itemRect.localScale;
+        DragByInterface dragItem = itemTransform.GetComponent<DragByInterface>();
+        if(dragItem != null)
+        {
+            baseScale = dragItem.OriginalScale;
+        }
+        itemRect.localScale = baseScale * scaleFactor;
     }
 }
