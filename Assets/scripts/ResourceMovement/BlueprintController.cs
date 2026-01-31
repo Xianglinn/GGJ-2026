@@ -74,8 +74,33 @@ public class BlueprintController : MonoBehaviour
             isComplete = complete;
             if(isComplete)
             {
+                // 获取触发的特效（如果有多个，取第一个或者按优先级，这里假设主要关注一个）
+                List<SpecialEffectType> triggered = GetTriggeredEffects();
+                SpecialEffectType mainEffect = SpecialEffectType.None;
+
+                if (triggered.Count > 0)
+                {
+                    mainEffect = triggered[0];
+                    Debug.Log("ITS COMPLETE");
+                    Debug.Log($"[BlueprintController] Effect triggered: {mainEffect}");
+
+                    // 1. 记录首次解锁
+                    if (DataManager.Instance != null)
+                    {
+                        string flagKey = "Effect_Unlocked_" + mainEffect.ToString();
+                        if (!DataManager.Instance.GetStoryFlag(flagKey))
+                        {
+                            DataManager.Instance.SetStoryFlag(flagKey, true);
+                            Debug.Log($"[BlueprintController] First time unlocking effect: {mainEffect}");
+                        }
+                    }
+                }
+
                 if (GameFlowManager.Instance != null)
                 {
+                    // 2. 设置当前运行的特效
+                    GameFlowManager.Instance.LastTriggeredEffect = mainEffect;
+
                     Debug.Log("Blueprint Complete! Switching to Epilogue.");
                     GameFlowManager.Instance.SwitchState(GameState.Epilogue);
                 }

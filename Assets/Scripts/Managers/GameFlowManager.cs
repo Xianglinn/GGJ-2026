@@ -50,6 +50,9 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     /// </summary>
     public GameState PreviousState => _previousState;
 
+    // 当前通过蓝图触发的特殊效果（用于 Scene4 对话分支）
+    public SpecialEffectType LastTriggeredEffect { get; set; } = SpecialEffectType.None;
+
     protected override void OnInitialize()
     {
         base.OnInitialize();

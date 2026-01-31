@@ -42,8 +42,9 @@ public class UILevelMapPanel : UIBasePanel<object>
         }
     }
     
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         if (toScene1Btn != null) toScene1Btn.onClick.RemoveListener(OnToScene1BtnClicked);
         
         if (UIManager.Instance != null)

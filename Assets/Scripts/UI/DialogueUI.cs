@@ -80,8 +80,9 @@ public class DialogueUI : UIBasePanel<DialogueData>
         SubscribeToEvents();
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         // 取消订阅事件
         if (DialogueManager.Instance != null)
         {
