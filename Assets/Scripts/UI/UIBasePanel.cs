@@ -5,6 +5,15 @@ using UnityEngine;
 /// 提供标准化的 UI 面板生命周期管理
 /// </summary>
 /// <typeparam name="T">数据模型类型</typeparam>
+/// <summary>
+/// Canvas 类型枚举
+/// </summary>
+public enum CanvasType
+{
+    Persistent, // 常驻 Canvas (DontDestroyOnLoad)
+    SceneLocal  // 场景本地 Canvas (随场景销毁)
+}
+
 public class UIBasePanel<T> : MonoBehaviour where T : class
 {
     /// <summary>
@@ -21,6 +30,11 @@ public class UIBasePanel<T> : MonoBehaviour where T : class
     /// 当前面板的数据模型
     /// </summary>
     protected T currentData;
+
+    /// <summary>
+    /// 面板所属的 Canvas 类型
+    /// </summary>
+    public virtual CanvasType PanelCanvasType => CanvasType.SceneLocal;
 
     /// <summary>
     /// 初始化面板并传入数据

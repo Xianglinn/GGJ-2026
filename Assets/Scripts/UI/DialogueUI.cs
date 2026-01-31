@@ -45,6 +45,9 @@ public class DialogueUI : UIBasePanel<DialogueData>
     /// 当前创建的选择按钮列表
     /// </summary>
     private List<Button> _activeChoiceButtons = new List<Button>();
+
+    public override CanvasType PanelCanvasType => CanvasType.Persistent;
+
     private void Awake()
     {
         // 确保有 CanvasGroup
