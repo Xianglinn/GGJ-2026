@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueID: 101
   lines:
-  - characterName: "\u4E3B\u89D2"
+  - characterName: 
     characterPortrait: {fileID: 0}
     dialogueText: "\u4F60\u597D\uFF0C\u8BF7\u95EE\u4F60\u662F\u8C01\uFF1F"
     voiceClip: {fileID: 0}

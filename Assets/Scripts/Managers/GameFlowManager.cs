@@ -201,10 +201,6 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
                     // 触发新手教程对话
                     CheckAndStartScene2Tutorial();
                 }
-                else
-                {
-                    Debug.LogWarning("[GameFlowManager] UIProloguePanel not registered. Please ensure it's in the scene.");
-                }
             }
         }
     }
@@ -238,7 +234,45 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     private void HandleGameplayState()
     {
         Debug.Log("[GameFlowManager] Entering Gameplay state");
-        // TODO: 加载或激活核心玩法（场景2/3）
+        
+        // 加载 Scene3
+        LoadScene("Scene3");
+        
+        // 场景加载完成后处理逻辑
+        SceneManager.sceneLoaded += OnScene3Loaded;
+    }
+
+  
+    
+    private void OnScene3Loaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Scene3")
+        {
+            SceneManager.sceneLoaded -= OnScene3Loaded;
+            
+            // 隐藏所有其他面板
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.HideAllPanels();
+                
+                // 尝试查找并注册（如果尚未注册，可能是因为物体默认隐藏导致 Awake 未执行）
+                if (!UIManager.Instance.IsPanelRegistered<UIGameplayPanel>())
+                {
+                    var panel = FindObjectOfType<UIGameplayPanel>(true); // true = include inactive
+                    if (panel != null)
+                    {
+                        UIManager.Instance.RegisterPanel(panel);
+                    }
+                }
+
+                // 显示玩法面板
+                if (UIManager.Instance.IsPanelRegistered<UIGameplayPanel>())
+                {
+                    UIManager.Instance.ShowPanel<UIGameplayPanel>();
+                    
+                }
+            }
+        }
     }
 
     private void HandleEpilogueState()
@@ -254,6 +288,79 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     }
 
     #endregion
+
+    /// <summary>
+    /// 带淡入淡出的场景切换
+    /// </summary>
+    /// <param name="sceneName">目标场景名称</param>
+    public void SwitchSceneWithFade(string sceneName)
+    {
+        StartCoroutine(SwitchSceneRoutine(sceneName));
+    }
+
+    private System.Collections.IEnumerator SwitchSceneRoutine(string sceneName)
+    {
+        Debug.Log($"[GameFlowManager] Starting fade transition to: {sceneName}");
+        
+        // 1. 获取并显示 Fade Panel
+        if (UIManager.Instance == null)
+        {
+            Debug.LogError("[GameFlowManager] UIManager.Instance is null! Cannot perform fade transition.");
+            yield break;
+        }
+
+        // 确保 FadePanel 已注册
+        if (!UIManager.Instance.IsPanelRegistered<UIFadePanel>())
+        {
+            var panel = FindObjectOfType<UIFadePanel>(true);
+            if (panel != null)
+            {
+                UIManager.Instance.RegisterPanel(panel);
+            }
+        }
+        
+        UIFadePanel fadePanel = null;
+        if (UIManager.Instance.IsPanelRegistered<UIFadePanel>())
+        {
+             UIManager.Instance.ShowPanel<UIFadePanel>();
+             fadePanel = UIManager.Instance.GetPanel<UIFadePanel>();
+        }
+
+        // 2. Fade In (变黑)
+        if (fadePanel != null)
+        {
+            bool fadeComplete = false;
+            fadePanel.FadeIn(0.5f, () => fadeComplete = true);
+            yield return new WaitUntil(() => fadeComplete);
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        // 3. 决定新的 GameState 并加载场景
+        GameState targetState = GameState.Home;
+        if (sceneName == "Scene2") targetState = GameState.Prologue;
+        else if (sceneName == "Scene3") targetState = GameState.Gameplay;
+        else if (sceneName == "Scene1") targetState = GameState.Home;
+        
+        // 切换状态（这会触发 LoadScene）
+        SwitchState(targetState);
+
+        // 4. 等待一帧确保场景载入
+        yield return null; 
+
+        // 5. Fade Out (变透明)
+        if (fadePanel != null)
+        {
+            bool fadeComplete = false;
+            fadePanel.FadeOut(0.5f, () => fadeComplete = true);
+            yield return new WaitUntil(() => fadeComplete);
+            
+            // 隐藏 FadePanel
+            UIManager.Instance.HidePanel<UIFadePanel>();
+        }
+    }
 
     #region 辅助方法
 
