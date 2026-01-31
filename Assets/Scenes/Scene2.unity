@@ -758,8 +758,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   titleText: {fileID: 0}
-  startButton: {fileID: 1464895976}
-  toScene3Btn: {fileID: 0}
+  startButton: {fileID: 0}
+  toScene3Btn: {fileID: 1464895976}
 --- !u!114 &1472660901
 MonoBehaviour:
   m_ObjectHideFlags: 0
