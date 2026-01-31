@@ -10,6 +10,7 @@ public class UIHomePanel : UIBasePanel<object>, IPointerClickHandler
     [Header("UI References")]
     [SerializeField] private Text hintText;
     [SerializeField] private Button toScene5Btn;
+    [SerializeField] private Button achievementButton;
 
     private void Awake()
     {
@@ -35,6 +36,11 @@ public class UIHomePanel : UIBasePanel<object>, IPointerClickHandler
                 toScene5Btn = btnObj.GetComponent<Button>();
                 toScene5Btn.onClick.AddListener(OnToScene5BtnClicked);
             }
+        }
+
+        if (achievementButton != null)
+        {
+            achievementButton.onClick.AddListener(OnAchievementButtonClicked);
         }
 
         Debug.Log("[UIHomePanel] Awake called");
@@ -79,6 +85,15 @@ public class UIHomePanel : UIBasePanel<object>, IPointerClickHandler
          if (GameFlowManager.Instance != null)
         {
             GameFlowManager.Instance.SwitchState(GameState.LevelMap);
+        }
+    }
+
+    private void OnAchievementButtonClicked()
+    {
+        Debug.Log("[UIHomePanel] Achievement Button Clicked");
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ShowPanel<UIAchievementPanel>();
         }
     }
 
