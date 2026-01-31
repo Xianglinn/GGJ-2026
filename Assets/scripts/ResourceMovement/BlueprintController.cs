@@ -7,6 +7,79 @@ public class BlueprintController : MonoBehaviour
     [SerializeField] private List<BlueprintSlot> slots = new List<BlueprintSlot>(); // 蓝图槽位列表
     [SerializeField] private int sameEffectRequired = 2; // 触发所需相同效果数
 
+    public event System.Action<bool> OnCompletionChanged;
+
+    private bool isComplete;
+
+    public bool IsComplete => isComplete;
+
+    private void Awake(){
+        BindSlots();
+        UpdateCompletionState(true);
+    }
+
+    private void OnEnable(){
+        UpdateCompletionState(true);
+    }
+
+    private void OnValidate(){
+        BindSlots();
+    }
+
+    // 绑定控制器到各槽位
+    private void BindSlots(){
+        if(slots == null)
+        {
+            return;
+        }
+        foreach(BlueprintSlot slot in slots)
+        {
+            if(slot == null)
+            {
+                continue;
+            }
+            slot.SetController(this);
+        }
+    }
+
+    // 槽位变化时调用
+    public void NotifySlotChanged(){
+        UpdateCompletionState(false);
+    }
+
+    // 判断是否全部槽位已填满
+    public bool AreAllSlotsFilled(){
+        if(slots == null || slots.Count == 0)
+        {
+            return false;
+        }
+        foreach(BlueprintSlot slot in slots)
+        {
+            if(slot == null)
+            {
+                return false;
+            }
+            if(slot.GetItemInfo() == null)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void UpdateCompletionState(bool forceNotify){
+        bool complete = AreAllSlotsFilled();
+        if(forceNotify || complete != isComplete)
+        {
+            isComplete = complete;
+            if(isComplete)
+            {
+                Debug.Log("ITS COMPLETE");
+            }
+            OnCompletionChanged?.Invoke(isComplete);
+        }
+    }
+
     // 统计所有槽位的特效数量
     public Dictionary<SpecialEffectType, int> CollectEffectCounts(){
         Dictionary<SpecialEffectType, int> counts = new Dictionary<SpecialEffectType, int>();
