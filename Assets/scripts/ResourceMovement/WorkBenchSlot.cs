@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 // 工作台槽位：接收拖拽物品
-public class WorkBenchSlot : MonoBehaviour, IDropHandler
+public class WorkBenchSlot : MonoBehaviour, IDropHandler, ISlot
 {
     private DragByInterface currentItem; // 当前物品
 
@@ -37,5 +37,11 @@ public class WorkBenchSlot : MonoBehaviour, IDropHandler
         {
             currentItem = null;
         }
+    }
+
+    // 实现 ISlot 接口
+    public ItemInfo GetItemInfo()
+    {
+        return currentItem != null ? currentItem.ItemInfo : null;
     }
 }

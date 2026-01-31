@@ -27,17 +27,32 @@ public class UITooltipPanel : UIBasePanel<string>
 
     private void Awake()
     {
-        // 自动注册
+        // 自动注册逻辑
         if (UIManager.Instance != null)
         {
-            UIManager.Instance.RegisterPanel(this);
+            // 如果已经注册过（说明 Persistent Canvas 下已经有一个了）
+            if (UIManager.Instance.IsPanelRegistered<UITooltipPanel>())
+            {
+                // 获取已注册的实例
+                var registeredPanel = UIManager.Instance.GetPanel<UITooltipPanel>();
+                
+                // 如果已注册的不是自己，说明自己是重复的（场景重载产生的）
+                if (registeredPanel != this)
+                {
+                    Debug.Log($"[UITooltipPanel] Duplicate detected. Destroying self. (InstanceID: {GetInstanceID()})");
+                    Destroy(gameObject);
+                    return; // 立即返回，不执行后续逻辑
+                }
+            }
+            else
+            {
+                // 还没注册，说明我是第一个
+                UIManager.Instance.RegisterPanel(this);
+            }
         }
 
         // 自动获取组件
         if (backgroundRect == null)
-            backgroundRect = GetComponent<RectTransform>(); // 自身或者是子对象，这里假设背景就是面板自身或者需要手动指定。
-            // 修正：通常背景是 Image 组件所在的节点。假如面板本身就有 Image，那就是自身。
-            // 让我们宽容一点：
             if (GetComponent<Image>() != null) backgroundRect = GetComponent<RectTransform>();
         
         if (descriptionText == null)
@@ -55,6 +70,9 @@ public class UITooltipPanel : UIBasePanel<string>
         if (cg == null) cg = gameObject.AddComponent<CanvasGroup>();
         cg.blocksRaycasts = false;
         cg.interactable = false;
+        
+        // 初始隐藏
+        gameObject.SetActive(false);
     }
 
     private void Update()
