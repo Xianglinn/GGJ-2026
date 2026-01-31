@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// 物品基础信息与玩法数据
 public class ItemInfo : MonoBehaviour
 {
     [Header("Basic Info")]
@@ -20,6 +21,7 @@ public class ItemInfo : MonoBehaviour
     public bool CanBeProcessed => canBeProcessed;
     public SpecialEffectType SpecialEffects => specialEffects;
 
+    // 设置加工状态
     public void SetProcessed(bool processed){
         if(canBeProcessed)
         {

@@ -1,5 +1,6 @@
 using System;
 
+// 面具部件类型
 public enum MaskPartType
 {
     Crystal,
@@ -10,6 +11,7 @@ public enum MaskPartType
 }
 
 [Flags]
+// 物品特效类型（可叠加）
 public enum SpecialEffectType
 {
     None = 0,

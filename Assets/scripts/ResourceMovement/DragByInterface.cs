@@ -1,22 +1,26 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+// UI 拖拽物品逻辑（基于 EventSystem）
 public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    private RectTransform rectTransform;
-    private Canvas parentCanvas;
-    private RectTransform canvasRect;
-    private CanvasGroup canvasGroup;
-    private Transform startParent;
-    private Vector2 startAnchoredPosition;
-    private bool wasDropped;
-    private Vector3 originalScale;
-    private Vector3 startScale;
-    private ItemInfo cachedItemInfo;
+    private RectTransform rectTransform; // 物品的 RectTransform
+    private Canvas parentCanvas; // 所在 Canvas
+    private RectTransform canvasRect; // Canvas 的 RectTransform
+    private CanvasGroup canvasGroup; // 控制射线阻挡
+    private Transform startParent; // 拖拽前父节点
+    private Vector2 startAnchoredPosition; // 拖拽前位置
+    private bool wasDropped; // 是否成功放入槽位
+    private Vector3 originalScale; // 物品原始缩放
+    private Vector3 startScale; // 拖拽前缩放
+    private ItemInfo cachedItemInfo; // 缓存的物品信息
 
+    // 供外部取原始缩放
     public Vector3 OriginalScale => originalScale;
+    // 供外部读取物品信息
     public ItemInfo ItemInfo => cachedItemInfo;
 
+    // 初始化组件与缓存
     private void Awake(){
         rectTransform = GetComponent<RectTransform>();
         parentCanvas = GetComponentInParent<Canvas>();
@@ -36,6 +40,7 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         RefreshItemInfo();
     }
 
+    // 记录初始父节点与位置
     private void Start(){
         startParent = transform.parent;
         if(rectTransform != null)
@@ -44,6 +49,7 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         }
     }
 
+    // 开始拖拽：清理旧槽位、置顶、居中到鼠标
     public void OnBeginDrag(PointerEventData eventData){
         if(rectTransform == null)
         {
@@ -83,6 +89,7 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         canvasGroup.blocksRaycasts = false;
     }
 
+    // 拖拽过程中跟随鼠标
     public void OnDrag(PointerEventData eventData){
         if(parentCanvas == null)
         {
@@ -92,6 +99,7 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         rectTransform.anchoredPosition += eventData.delta / parentCanvas.scaleFactor;
     }
 
+    // 结束拖拽：没放入则回到原位置
     public void OnEndDrag(PointerEventData eventData){
         canvasGroup.blocksRaycasts = true;
         if(!wasDropped)
@@ -102,6 +110,7 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         }
     }
 
+    // 放入槽位并触发缩放适配
     public void PlaceInSlot(Transform slotTransform){
         wasDropped = true;
         transform.SetParent(slotTransform, false);
@@ -113,6 +122,7 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         }
     }
 
+    // 将物品中心对齐到鼠标位置
     private void CenterOnPointer(PointerEventData eventData){
         if(canvasRect == null)
         {
@@ -128,6 +138,7 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         }
     }
 
+    // 重新查找并缓存 ItemInfo
     private void RefreshItemInfo(){
         cachedItemInfo = GetComponent<ItemInfo>();
         if(cachedItemInfo == null)

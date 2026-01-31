@@ -1,14 +1,16 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+// 蓝图槽位：只接收指定部件类型
 public class BlueprintSlot : MonoBehaviour, IDropHandler
 {
-    [SerializeField] private MaskPartType allowedPart;
-    private DragByInterface currentItem;
+    [SerializeField] private MaskPartType allowedPart; // 允许的部件类型
+    private DragByInterface currentItem; // 当前槽位物品
 
     private void Awake(){
     }
 
+    // 处理拖拽放入
     public void OnDrop(PointerEventData eventData){
         if(currentItem != null)
         {
@@ -40,6 +42,7 @@ public class BlueprintSlot : MonoBehaviour, IDropHandler
         currentItem = dragItem;
     }
 
+    // 读取当前物品信息
     public ItemInfo GetItemInfo(){
         if(currentItem == null)
         {
@@ -48,6 +51,7 @@ public class BlueprintSlot : MonoBehaviour, IDropHandler
         return currentItem.ItemInfo != null ? currentItem.ItemInfo : GetItemInfoFrom(currentItem);
     }
 
+    // 清空占位（用于拖出）
     public void ClearItem(DragByInterface item){
         if(currentItem == item)
         {
@@ -55,6 +59,7 @@ public class BlueprintSlot : MonoBehaviour, IDropHandler
         }
     }
 
+    // 从拖拽物体链路获取 ItemInfo
     private ItemInfo GetItemInfoFrom(DragByInterface dragItem){
         if(dragItem == null)
         {
