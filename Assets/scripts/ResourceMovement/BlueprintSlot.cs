@@ -5,10 +5,12 @@ using UnityEngine.EventSystems;
 public class BlueprintSlot : MonoBehaviour, IDropHandler, ISlot
 {
     [SerializeField] private MaskPartType allowedPart; // 允许的部件类型
+    [SerializeField] private GameObject filledImage; // 对应的 _img 显示对象
     private DragByInterface currentItem; // 当前槽位物品
     private BlueprintController controller; // 所属蓝图控制器
 
     private void Awake(){
+        UpdateFilledVisual();
     }
 
     // 处理拖拽放入
@@ -41,6 +43,7 @@ public class BlueprintSlot : MonoBehaviour, IDropHandler, ISlot
 
         dragItem.PlaceInSlot(transform);
         currentItem = dragItem;
+        UpdateFilledVisual();
         NotifySlotChanged();
     }
 
@@ -58,6 +61,7 @@ public class BlueprintSlot : MonoBehaviour, IDropHandler, ISlot
         if(currentItem == item)
         {
             currentItem = null;
+            UpdateFilledVisual();
             NotifySlotChanged();
         }
     }
@@ -89,6 +93,13 @@ public class BlueprintSlot : MonoBehaviour, IDropHandler, ISlot
         if(controller != null)
         {
             controller.NotifySlotChanged();
+        }
+    }
+
+    private void UpdateFilledVisual(){
+        if(filledImage != null)
+        {
+            filledImage.SetActive(currentItem != null);
         }
     }
 }
