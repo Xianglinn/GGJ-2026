@@ -278,7 +278,36 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     private void HandleEpilogueState()
     {
         Debug.Log("[GameFlowManager] Entering Epilogue state");
-        // TODO: 加载或激活尾声剧情场景
+        LoadScene("Scene4");
+        SceneManager.sceneLoaded += OnScene4Loaded;
+    }
+
+    private void OnScene4Loaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Scene4")
+        {
+            SceneManager.sceneLoaded -= OnScene4Loaded;
+            
+            // 隐藏所有其他面板
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.HideAllPanels();
+                
+                 if (!UIManager.Instance.IsPanelRegistered<UIEpiloguePanel>())
+                {
+                    var panel = FindObjectOfType<UIEpiloguePanel>(true);
+                    if (panel != null)
+                    {
+                        UIManager.Instance.RegisterPanel(panel);
+                    }
+                }
+
+                if (UIManager.Instance.IsPanelRegistered<UIEpiloguePanel>())
+                {
+                    UIManager.Instance.ShowPanel<UIEpiloguePanel>();
+                }
+            }
+        }
     }
 
     private void HandleLevelMapState()

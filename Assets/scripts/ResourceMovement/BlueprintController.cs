@@ -74,7 +74,15 @@ public class BlueprintController : MonoBehaviour
             isComplete = complete;
             if(isComplete)
             {
-                Debug.Log("ITS COMPLETE");
+                if (GameFlowManager.Instance != null)
+                {
+                    Debug.Log("Blueprint Complete! Switching to Epilogue.");
+                    GameFlowManager.Instance.SwitchState(GameState.Epilogue);
+                }
+                else
+                {
+                   Debug.LogError("GameFlowManager instance not found!");
+                }
             }
             OnCompletionChanged?.Invoke(isComplete);
         }
