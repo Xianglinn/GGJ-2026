@@ -201,10 +201,6 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
                     // 触发新手教程对话
                     CheckAndStartScene2Tutorial();
                 }
-                else
-                {
-                    Debug.LogWarning("[GameFlowManager] UIProloguePanel not registered. Please ensure it's in the scene.");
-                }
             }
         }
     }
@@ -238,7 +234,45 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     private void HandleGameplayState()
     {
         Debug.Log("[GameFlowManager] Entering Gameplay state");
-        // TODO: 加载或激活核心玩法（场景2/3）
+        
+        // 加载 Scene3
+        LoadScene("Scene3");
+        
+        // 场景加载完成后处理逻辑
+        SceneManager.sceneLoaded += OnScene3Loaded;
+    }
+
+  
+    
+    private void OnScene3Loaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Scene3")
+        {
+            SceneManager.sceneLoaded -= OnScene3Loaded;
+            
+            // 隐藏所有其他面板
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.HideAllPanels();
+                
+                // 尝试查找并注册（如果尚未注册，可能是因为物体默认隐藏导致 Awake 未执行）
+                if (!UIManager.Instance.IsPanelRegistered<UIGameplayPanel>())
+                {
+                    var panel = FindObjectOfType<UIGameplayPanel>(true); // true = include inactive
+                    if (panel != null)
+                    {
+                        UIManager.Instance.RegisterPanel(panel);
+                    }
+                }
+
+                // 显示玩法面板
+                if (UIManager.Instance.IsPanelRegistered<UIGameplayPanel>())
+                {
+                    UIManager.Instance.ShowPanel<UIGameplayPanel>();
+                    
+                }
+            }
+        }
     }
 
     private void HandleEpilogueState()
