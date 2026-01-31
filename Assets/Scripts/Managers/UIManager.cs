@@ -20,41 +20,160 @@ public class UIManager : MonoSingleton<UIManager>
     /// <summary>
     /// UI 根节点 Canvas
     /// </summary>
-    [SerializeField]
-    private Canvas _uiCanvas;
+    private const string PersistentCanvasName = "[PersistentCanvas]";
+    private const string SceneCanvasName = "[SceneCanvas]";
+
+    private Canvas _persistentCanvas;
+    private Canvas _sceneCanvas;
 
     /// <summary>
-    /// 获取 UI Canvas
+    /// 获取 Persistent Canvas (常驻)
     /// </summary>
-    public Canvas UICanvas => _uiCanvas;
+    public Canvas PersistentCanvas
+    {
+        get
+        {
+            if (_persistentCanvas == null)
+            {
+                _persistentCanvas = GetOrCreateCanvas(PersistentCanvasName, 999, true);
+            }
+            return _persistentCanvas;
+        }
+    }
+
+    /// <summary>
+    /// 获取 Scene Canvas (场景本地)
+    /// </summary>
+    public Canvas SceneCanvas
+    {
+        get
+        {
+            if (_sceneCanvas == null)
+            {
+                _sceneCanvas = GetOrCreateCanvas(SceneCanvasName, 0, false);
+            }
+            return _sceneCanvas;
+        }
+    }
 
     protected override void OnInitialize()
     {
         base.OnInitialize();
 
-        // 尝试查找场景中的 Canvas
-        if (_uiCanvas == null)
+        // 初始化 Persistent Canvas
+        var pCanvas = PersistentCanvas;
+        
+        // 检查并保护 EventSystem
+        CheckAndInitEventSystem();
+
+        Debug.Log("[UIManager] Initialized successfully. Dual Canvas system ready.");
+    }
+
+    /// <summary>
+    /// 获取或创建 Canvas
+    /// </summary>
+    private Canvas GetOrCreateCanvas(string canvasName, int sortOrder, bool isPersistent)
+    {
+        GameObject canvasObj = GameObject.Find(canvasName);
+        if (canvasObj == null)
         {
-            _uiCanvas = FindObjectOfType<Canvas>();
-            if (_uiCanvas == null)
+            canvasObj = new GameObject(canvasName);
+            Canvas canvas = canvasObj.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.sortingOrder = sortOrder;
+            canvasObj.AddComponent<UnityEngine.UI.CanvasScaler>();
+            canvasObj.AddComponent<UnityEngine.UI.GraphicRaycaster>();
+            
+            if (isPersistent)
             {
-                Debug.LogWarning("[UIManager] No Canvas found in scene. UI panels may not display correctly.");
+                DontDestroyOnLoad(canvasObj);
             }
-            else
-            {
-                // 确保 Canvas 在场景切换时不被销毁
-                DontDestroyOnLoad(_uiCanvas.gameObject);
-                Debug.Log("[UIManager] Canvas set to DontDestroyOnLoad.");
-            }
+            Debug.Log($"[UIManager] Created new canvas: {canvasName}");
+            return canvas;
         }
         else
         {
-            // 如果 Canvas 已经赋值，也要确保它不被销毁
-            DontDestroyOnLoad(_uiCanvas.gameObject);
-            Debug.Log("[UIManager] Canvas set to DontDestroyOnLoad.");
+            Canvas canvas = canvasObj.GetComponent<Canvas>();
+            if (canvas == null) canvas = canvasObj.AddComponent<Canvas>();
+            
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.sortingOrder = sortOrder;
+            
+            if (isPersistent)
+            {
+                DontDestroyOnLoad(canvasObj);
+            }
+            
+            return canvas;
+        }
+    }
+
+    /// <summary>
+    /// 检查并初始化 EventSystem
+    /// </summary>
+    private void CheckAndInitEventSystem()
+    {
+        UnityEngine.EventSystems.EventSystem[] eventSystems = FindObjectsOfType<UnityEngine.EventSystems.EventSystem>();
+        
+        UnityEngine.EventSystems.EventSystem globalEventSystem = null;
+
+        // 1. 寻找或保留 Persistent Canvas 下的 EventSystem
+        if (_persistentCanvas != null)
+        {
+            globalEventSystem = _persistentCanvas.GetComponentInChildren<UnityEngine.EventSystems.EventSystem>();
         }
 
-        Debug.Log("[UIManager] Initialized successfully.");
+        // 2. 如果没有，创建一个并挂载到 PersistentCanvas 下（或者作为独立对象）
+        if (globalEventSystem == null)
+        {
+            // 简单的查找现有的是否有标记为 DontDestroyOnLoad 的
+            foreach (var es in eventSystems)
+            {
+                if (es.gameObject.scene.name == "DontDestroyOnLoad")
+                {
+                    globalEventSystem = es;
+                    break;
+                }
+            }
+        }
+
+        if (globalEventSystem == null)
+        {
+            GameObject esGO = new GameObject("EventSystem");
+            globalEventSystem = esGO.AddComponent<UnityEngine.EventSystems.EventSystem>();
+            esGO.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
+            
+            // 挂载到 PersistentCanvas 下，或者独立 DontDestroyOnLoad
+            // 为了整洁，我们可以放 PersistentCanvas 下，但 EventSystem 即使独立也没问题
+            // 这里我们遵循 "Event System 唯一性：确保全剧只有一个 EventSystem 并将其置于 Persistent Canvas 所在的层级"
+            if (_persistentCanvas != null)
+            {
+                esGO.transform.SetParent(_persistentCanvas.transform);
+            }
+            else
+            {
+                DontDestroyOnLoad(esGO);
+            }
+             Debug.Log("[UIManager] Created global EventSystem.");
+        }
+        else
+        {
+             // 确保它在 PersistentCanvas 层级或者是 DDOL
+             if (globalEventSystem.transform.parent != _persistentCanvas.transform)
+             {
+                 globalEventSystem.transform.SetParent(_persistentCanvas.transform);
+             }
+        }
+
+        // 3. 销毁所有其他的 EventSystem
+        foreach (var es in eventSystems)
+        {
+            if (es != globalEventSystem)
+            {
+                Debug.LogWarning($"[UIManager] Destroying redundant EventSystem on {es.gameObject.name}");
+                Destroy(es.gameObject);
+            }
+        }
     }
 
     /// <summary>
@@ -72,9 +191,34 @@ public class UIManager : MonoSingleton<UIManager>
         }
 
         _registeredPanels[panelType] = panel;
+        
+        // 自动化归位逻辑
+        CanvasType targetType = CanvasType.SceneLocal;
+        var prop = panelType.GetProperty("PanelCanvasType");
+        if (prop != null)
+        {
+            targetType = (CanvasType)prop.GetValue(panel);
+        }
+        else
+        {
+            // 备用：尝试读取字段或默认为 SceneLocal
+        }
+
+        Canvas targetCanvas = (targetType == CanvasType.Persistent) ? PersistentCanvas : SceneCanvas;
+        if (targetCanvas != null)
+        {
+            // 只有当父节点不是目标 Canvas 时才重设 parent
+            // 这样可以避免一些 transform 变化带来的副作用，虽然在 Awake 里通常没问题
+            if (panel.transform.parent != targetCanvas.transform)
+            {
+                panel.transform.SetParent(targetCanvas.transform, false);
+                Debug.Log($"[UIManager] Auto-reparented {panelType.Name} to {targetCanvas.name}");
+            }
+        }
+
         panel.gameObject.SetActive(false); // 默认隐藏面板
 
-        Debug.Log($"[UIManager] Registered panel: {panelType.Name}");
+        Debug.Log($"[UIManager] Registered panel: {panelType.Name} on {targetType} Canvas");
     }
 
     /// <summary>
@@ -230,13 +374,26 @@ public class UIManager : MonoSingleton<UIManager>
     /// </summary>
     public void HideAllPanels()
     {
-        foreach (var panel in _registeredPanels.Values)
+        // 使用 Keys 列表遍历，以便在迭代过程中安全地移除已销毁的面板
+        var panelTypes = new List<System.Type>(_registeredPanels.Keys);
+        
+        foreach (var type in panelTypes)
         {
-            panel.gameObject.SetActive(false);
+            var panel = _registeredPanels[type];
+            if (panel != null)
+            {
+                panel.gameObject.SetActive(false);
+            }
+            else
+            {
+                // 如果面板已销毁（引用不再有效），则从字典中移除
+                _registeredPanels.Remove(type);
+                Debug.LogWarning($"[UIManager] Found destroyed panel reference for {type.Name}, removing from registry.");
+            }
         }
 
         _panelStack.Clear();
-        Debug.Log("[UIManager] All panels hidden.");
+        Debug.Log("[UIManager] All panels hidden (and registry cleaned).");
     }
 
     /// <summary>

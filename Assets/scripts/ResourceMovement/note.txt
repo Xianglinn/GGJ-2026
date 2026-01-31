@@ -1,0 +1,14 @@
+你需要做的配置
+1) 给每个物品设置 ItemInfo.itemId
+可以用英文 ID，比如 crystal_01
+2) 在 Scene2 和 Scene3 的 InventoryPanel 上挂 InventoryPanelSync
+把所有 InventorySlot 拖进 Slots
+在 Prefabs 列表里 手动填 itemId ↔ prefab 的映射
+好处
+不需要 ItemData / ItemCatalog
+不改 DataManager
+20 个物品完全够用，维护成本低
+如果你希望我再加：
+自动从目录搜 prefab 的映射
+或把 InventoryPanelSync 做成 Editor 工具一键填
+告诉我就行。
