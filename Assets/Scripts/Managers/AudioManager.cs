@@ -126,14 +126,22 @@ public class AudioManager : MonoSingleton<AudioManager>
         // 如果已经在播放该音乐，则跳过
         if (_musicSource.clip != null && _musicSource.clip.name == musicName) return;
 
-        AudioClip clip = Resources.Load<AudioClip>("Audio/BGM/" + musicName);
+        // 优先在 Music 文件夹查找
+        AudioClip clip = Resources.Load<AudioClip>("Music/" + musicName);
+        
+        // 兼容旧路径
+        if (clip == null)
+        {
+            clip = Resources.Load<AudioClip>("Audio/BGM/" + musicName);
+        }
+
         if (clip != null)
         {
             PlayMusic(clip, fadeTime);
         }
         else
         {
-            Debug.LogWarning($"[AudioManager] Music clip not found at Resources/Audio/BGM/{musicName}");
+            Debug.LogWarning($"[AudioManager] Music clip not found at Resources/Music/{musicName} or Resources/Audio/BGM/{musicName}");
         }
     }
 

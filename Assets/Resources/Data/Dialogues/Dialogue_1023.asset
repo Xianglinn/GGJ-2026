@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed681275848b42d45b1c0a193d3e8337, type: 3}
+  m_Name: Dialogue_1023
+  m_EditorClassIdentifier: 
+  dialogueID: 1023
+  lines:
+  - characterName: "\u5C0F\u5B69"
+    characterPortrait: {fileID: 0}
+    dialogueText: "\u5988\u5988\uFF0C\u6211\u597D\u51B7\u54E6\u3002"
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 30
+    autoContinue: 0
+    autoContinueDelay: 2
+    bgmName: Theskythere
+    backgroundName: 0
+  - characterName: "\u6BCD\u4EB2"
+    characterPortrait: {fileID: 0}
+    dialogueText: "\u5B9D\u8D1D\uFF0C\u5988\u5988\u7ED9\u4F60\u751F\u4E00\u70B9\u706B\u54E6\u3002\u522B\u6015\u3002"
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 30
+    autoContinue: 0
+    autoContinueDelay: 2
+    bgmName: Theskythere
+    backgroundName: 0
+  - characterName: 
+    characterPortrait: {fileID: 0}
+    dialogueText: "\u6BCD\u4EB2\u6307\u5C16\u7684\u706B\u7130\u8E7F\u5347\u4E86\u51E0\u79D2\uFF0C\u77ED\u6682\u5730\u4E3A\u5C0F\u5B69\u5E26\u6765\u4E86\u4E00\u4E9B\u5149\u8292\u2014\u2014\u5728\u706B\u7130\u71C3\u53CA\u89D2\u843D\u91CC\u86DB\u7F51\u7684\u90A3\u4E00\u79D2\uFF0C\u6816\u606F\u7740\u7684\u8759\u8760\u4ECE\u7262\u7B3C\u4E2D\u98DE\u51FA\uFF0C\u86DB\u7F51\u4E5F\u522B\u71C3\u6210\u7070\u70EC\uFF0C\u8FDE\u5E26\u7740\u6BCD\u4EB2\u5982\u6619\u82B1\u822C\u7684\u706B\u7130\uFF0C\u4E00\u540C\u6D88\u6563\u5728\u6F6E\u6E7F\u7684\u7A7A\u6C14\u91CC\u3002"
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 30
+    autoContinue: 0
+    autoContinueDelay: 2
+    bgmName: Theskythere
+    backgroundName: 0
+  - characterName: "\u5C0F\u5B69"
+    characterPortrait: {fileID: 0}
+    dialogueText: "\u5988\u5988\uFF0C\u6211\u597D\u50CF\u542C\u5230\u98CE\u94C3\u58F0\u4E86\u3002"
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 30
+    autoContinue: 0
+    autoContinueDelay: 2
+    bgmName: Theskythere
+    backgroundName: 0
+  - characterName: "\u6BCD\u4EB2"
+    characterPortrait: {fileID: 0}
+    dialogueText: "\u4E56\u5B9D\u8D1D\uFF0C\u4E56\uFF0C\u8FD9\u662F\u4E16\u754C\u4F20\u9012\u7ED9\u6211\u4EEC\u7684\u793C\u7269\u3002"
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 30
+    autoContinue: 0
+    autoContinueDelay: 2
+    bgmName: Theskythere
+    backgroundName: 0
+  - characterName: 
+    characterPortrait: {fileID: 0}
+    dialogueText: "\u6BCD\u4EB2\u7684\u773C\u6CEA\u65E0\u58F0\u5730\u6389\u5728\u5730\u4E0A\uFF0C\u843D\u5230\u5979\u811A\u8FB9\u7684\u5934\u9AA8\u4E2D\uFF0C\u72B9\u5982\u4E0A\u4E00\u4E2A\u4E3A\u9B54\u6CD5\u7684\u201C\u53D1\u5C55\u201D\u800C\u727A\u7272\u7684\u4EBA\u6240\u7559\u4E0B\u7684\u73CD\u8D35\u5370\u8BB0\u3002"
+    voiceClip: {fileID: 0}
+    typewriterSpeed: 30
+    autoContinue: 0
+    autoContinueDelay: 2
+    bgmName: Theskythere
+    backgroundName: 0
+  choices: []
+  nextDialogue: {fileID: 0}
+  endsConversation: 0
+  onCompleteEventName: 

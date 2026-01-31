@@ -17,7 +17,16 @@ public class DialogueImportTool : EditorWindow
 
         try
         {
-            string[] lines = File.ReadAllLines(filePath);
+            List<string> linesList = new List<string>();
+            using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var sr = new StreamReader(fs))
+            {
+                while (!sr.EndOfStream)
+                {
+                    linesList.Add(sr.ReadLine());
+                }
+            }
+            string[] lines = linesList.ToArray();
             if (lines.Length <= 1)
             {
                 Debug.LogError("[DialogueImportTool] CSV file is empty or only contains header.");
@@ -105,18 +114,25 @@ public class DialogueImportTool : EditorWindow
                 typewriterSpeed = 30f // Default value
             };
 
-            // Link Portrait
+            // Link Portrait (Search globally)
             if (!string.IsNullOrEmpty(data.PortraitName))
             {
-                string portraitResourcePath = Path.Combine("Sprites/Portraits/", data.PortraitName);
-                Sprite portrait = Resources.Load<Sprite>(portraitResourcePath);
-                if (portrait == null)
+                Sprite portrait = FindAssetByName<Sprite>(data.PortraitName);
+                if (portrait != null)
                 {
-                    Debug.LogWarning($"[DialogueImportTool] Portrait not found: {portraitResourcePath} for ID {id}");
+                    newLine.characterPortrait = portrait;
                 }
-                newLine.characterPortrait = portrait;
+                else
+                {
+                    Debug.LogWarning($"[DialogueImportTool] Portrait not found: {data.PortraitName} for ID {id}");
+                }
             }
 
+            // Attempt to link Voice Clip if an exact match is found (Optional feature)
+            // Assuming BGMName might be used for voice if valid? No, keep BGM as string.
+            // But if user meant "Audio Files", maybe they want us to find a voice clip matching the ID or something?
+            // Let's stick to just fixing the asset search for Portrait for now as it's the only object reference.
+            
             asset.lines.Add(newLine);
         }
 
@@ -128,6 +144,23 @@ public class DialogueImportTool : EditorWindow
         {
             EditorUtility.SetDirty(asset);
         }
+    }
+
+    private static T FindAssetByName<T>(string name) where T : UnityEngine.Object
+    {
+        if (string.IsNullOrEmpty(name)) return null;
+
+        string[] guids = AssetDatabase.FindAssets($"{name} t:{typeof(T).Name}");
+        foreach (string guid in guids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            string fileName = Path.GetFileNameWithoutExtension(path);
+            if (fileName.Equals(name, StringComparison.OrdinalIgnoreCase))
+            {
+                return AssetDatabase.LoadAssetAtPath<T>(path);
+            }
+        }
+        return null;
     }
 
     private static string[] ParseCSVLine(string line)
