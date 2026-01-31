@@ -6,6 +6,7 @@ public class BlueprintSlot : MonoBehaviour, IDropHandler, ISlot
 {
     [SerializeField] private MaskPartType allowedPart; // 允许的部件类型
     private DragByInterface currentItem; // 当前槽位物品
+    private BlueprintController controller; // 所属蓝图控制器
 
     private void Awake(){
     }
@@ -40,6 +41,7 @@ public class BlueprintSlot : MonoBehaviour, IDropHandler, ISlot
 
         dragItem.PlaceInSlot(transform);
         currentItem = dragItem;
+        NotifySlotChanged();
     }
 
     // 读取当前物品信息
@@ -56,6 +58,7 @@ public class BlueprintSlot : MonoBehaviour, IDropHandler, ISlot
         if(currentItem == item)
         {
             currentItem = null;
+            NotifySlotChanged();
         }
     }
 
@@ -76,5 +79,16 @@ public class BlueprintSlot : MonoBehaviour, IDropHandler, ISlot
             info = dragItem.GetComponentInChildren<ItemInfo>();
         }
         return info;
+    }
+
+    public void SetController(BlueprintController owner){
+        controller = owner;
+    }
+
+    private void NotifySlotChanged(){
+        if(controller != null)
+        {
+            controller.NotifySlotChanged();
+        }
     }
 }

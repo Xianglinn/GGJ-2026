@@ -48,6 +48,12 @@ public class UIProloguePanel : UIBasePanel<object>
     {
         base.OnInitialize(data);
 
+        InventoryPanelSync panelSync = FindObjectOfType<InventoryPanelSync>(true);
+        if (panelSync != null)
+        {
+            panelSync.LoadFromManager();
+        }
+
         // 初始化UI显示
         if (titleText != null)
         {
