@@ -10,7 +10,11 @@ public class UIHomePanel : UIBasePanel<object>, IPointerClickHandler
     [Header("UI References")]
     [SerializeField] private Text hintText;
     [SerializeField] private Button toScene5Btn;
+<<<<<<< Updated upstream
     [SerializeField] private Button achievementButton;
+=======
+    [SerializeField] private Button achievementBtn;
+>>>>>>> Stashed changes
 
     private void Awake()
     {
@@ -38,9 +42,30 @@ public class UIHomePanel : UIBasePanel<object>, IPointerClickHandler
             }
         }
 
+<<<<<<< Updated upstream
         if (achievementButton != null)
         {
             achievementButton.onClick.AddListener(OnAchievementButtonClicked);
+=======
+        if (achievementBtn != null)
+        {
+            achievementBtn.onClick.AddListener(OnAchievementBtnClicked);
+        }
+        else
+        {
+            // 尝试查找 UIAchivementBtn (注意拼写: User Request specified "UIAchivementBtn")
+            var achBtnObj = GameObject.Find("UIAchivementBtn"); // User typo in request? Keeping "UIAchivementBtn" as per request just in case, but standard is Achievement
+            if (achBtnObj == null) achBtnObj = GameObject.Find("UIAchievementBtn"); // Try correct spelling too
+
+            if (achBtnObj != null)
+            {
+                achievementBtn = achBtnObj.GetComponent<Button>();
+                if (achievementBtn != null)
+                {
+                    achievementBtn.onClick.AddListener(OnAchievementBtnClicked);
+                }
+            }
+>>>>>>> Stashed changes
         }
 
         Debug.Log("[UIHomePanel] Awake called");
@@ -88,12 +113,45 @@ public class UIHomePanel : UIBasePanel<object>, IPointerClickHandler
         }
     }
 
+<<<<<<< Updated upstream
     private void OnAchievementButtonClicked()
     {
         Debug.Log("[UIHomePanel] Achievement Button Clicked");
         if (UIManager.Instance != null)
         {
             UIManager.Instance.ShowPanel<UIAchievementPanel>();
+=======
+    private void OnAchievementBtnClicked()
+    {
+        Debug.Log("[UIHomePanel] Achievement Btn Clicked");
+        if (UIManager.Instance != null)
+        {
+            // 如果面板未注册（可能是因为初始是 Disable 的，Awske 没跑），尝试手动查找并修正
+            if (!UIManager.Instance.IsPanelRegistered<UIAchievementPanel>())
+            {
+                // 尝试查找场景中隐藏的面板
+                // Note: Resources.FindObjectsOfTypeAll 可以找到隐藏的，但也会找到 Asset 里的 Prefab，所以需要过滤
+                var allPanels = Resources.FindObjectsOfTypeAll<UIAchievementPanel>();
+                foreach (var p in allPanels)
+                {
+                    // 确保是场景中的对象 (hideFlags 检查，或 editor 里的 check)
+                    // 在运行时，场景对象的 asset 标记通常不同，或者简单检查 gameObject.scene
+                    if (p.gameObject.scene.IsValid())
+                    {
+                        Debug.Log("[UIHomePanel] Found inactive UIAchievementPanel, manually registering and activating.");
+                        p.gameObject.SetActive(true); // 激活它，触发 Awake (如果之前没触发)，或者手动 Register
+                        if (!UIManager.Instance.IsPanelRegistered<UIAchievementPanel>())
+                        {
+                            UIManager.Instance.RegisterPanel(p); // 如果 Awake 还没跑或没注册成功，手动注册
+                        }
+                        break; // 假设只有一个
+                    }
+                }
+            }
+
+            // 显示成就面板，传递 null 数据进行初始化
+            UIManager.Instance.ShowPanel<UIAchievementPanel, object>(null);
+>>>>>>> Stashed changes
         }
     }
 
