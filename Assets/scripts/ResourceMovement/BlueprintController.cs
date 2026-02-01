@@ -106,14 +106,14 @@ public class BlueprintController : MonoBehaviour
                 {
                     // 设置当前运行的特效供 Scene4 使用
                     GameFlowManager.Instance.LastTriggeredEffect = mainEffect;
+                    Debug.Log($"[BlueprintController] Set GameFlowManager.LastTriggeredEffect to: {mainEffect}");
 
-                    Debug.Log("Blueprint Complete! Switching to Epilogue.");
+                    Debug.Log("[BlueprintController] Blueprint Complete! Switching to Epilogue (Scene 4).");
                     GameFlowManager.Instance.SwitchState(GameState.Epilogue);
                 }
                 else
                 {
-                    GameFlowManager.Instance.LastTriggeredEffect = SpecialEffectType.None;
-                   Debug.LogError("GameFlowManager instance not found!");
+                    Debug.LogError("[BlueprintController] GameFlowManager instance not found! Cannot pass effect to Epilogue.");
                 }
             }
             OnCompletionChanged?.Invoke(isComplete);
@@ -139,9 +139,11 @@ public class BlueprintController : MonoBehaviour
             SpecialEffectType effects = info.SpecialEffects;
             if(effects == SpecialEffectType.None)
             {
+                Debug.Log($"[BlueprintController] Slot {slot.name} item {info.ItemId} has no effects.");
                 continue;
             }
 
+            Debug.Log($"[BlueprintController] Slot {slot.name} item {info.ItemId} carries effects: {effects}");
             foreach(SpecialEffectType effect in GetFlags(effects))
             {
                 if(!counts.ContainsKey(effect))
@@ -149,6 +151,7 @@ public class BlueprintController : MonoBehaviour
                     counts[effect] = 0;
                 }
                 counts[effect] += 1;
+                Debug.Log($"[BlueprintController] Incremented count for {effect}. Current total: {counts[effect]}");
             }
         }
         return counts;

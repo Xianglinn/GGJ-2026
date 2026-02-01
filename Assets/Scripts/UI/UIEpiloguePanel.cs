@@ -65,6 +65,7 @@ public class UIEpiloguePanel : UIBasePanel<object>
         if (GameFlowManager.Instance == null || DialogueManager.Instance == null) return;
 
         SpecialEffectType effect = GameFlowManager.Instance.LastTriggeredEffect;
+        Debug.Log($"[UIEpiloguePanel] StartBranchDialogue received effect: {effect}");
         
         // 明确处理无特效情况
         if (effect == SpecialEffectType.None)

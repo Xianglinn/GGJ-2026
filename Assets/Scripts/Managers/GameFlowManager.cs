@@ -299,6 +299,9 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     {
         Debug.Log("[GameFlowManager] Entering Gameplay state");
         
+        // 重置本次运行的特殊效果，确保在拼图界面也是新鲜的
+        LastTriggeredEffect = SpecialEffectType.None;
+
         // 加载 Scene3
         LoadScene("Scene3");
         
