@@ -10,6 +10,7 @@ public class UIHomePanel : UIBasePanel<object>, IPointerClickHandler
     [Header("UI References")]
     [SerializeField] private Text hintText;
     [SerializeField] private Button toScene5Btn;
+    [SerializeField] private Button achievementBtn;
 
     private void Awake()
     {
@@ -34,6 +35,20 @@ public class UIHomePanel : UIBasePanel<object>, IPointerClickHandler
             {
                 toScene5Btn = btnObj.GetComponent<Button>();
                 toScene5Btn.onClick.AddListener(OnToScene5BtnClicked);
+            }
+        }
+
+        if (achievementBtn != null)
+        {
+            achievementBtn.onClick.AddListener(OnAchievementBtnClicked);
+        }
+        else
+        {
+            var achObj = GameObject.Find("AchivementBtn");
+            if (achObj != null)
+            {
+                achievementBtn = achObj.GetComponent<Button>();
+                achievementBtn.onClick.AddListener(OnAchievementBtnClicked);
             }
         }
 
@@ -79,6 +94,33 @@ public class UIHomePanel : UIBasePanel<object>, IPointerClickHandler
          if (GameFlowManager.Instance != null)
         {
             GameFlowManager.Instance.SwitchState(GameState.LevelMap);
+        }
+    }
+
+    private void OnAchievementBtnClicked()
+    {
+        Debug.Log("[UIHomePanel] Achievement Btn Clicked");
+        if (UIManager.Instance != null)
+        {
+            if (!UIManager.Instance.IsPanelRegistered<UIAchivementPanel>())
+            {
+                // 如果未注册（通常意味着未实例化），尝试查找或加载
+                var panel = FindObjectOfType<UIAchivementPanel>(true);
+                if (panel != null)
+                {
+                    UIManager.Instance.RegisterPanel(panel);
+                    UIManager.Instance.ShowPanel<UIAchivementPanel, object>(null);
+                }
+                else
+                {
+                    // 如果场景中没有，可能需要动态加载 (暂时假设场景中有)
+                    Debug.LogError("[UIHomePanel] UIAchivementPanel not found in scene!");
+                }
+            }
+            else
+            {
+                UIManager.Instance.ShowPanel<UIAchivementPanel, object>(null);
+            }
         }
     }
 

@@ -80,6 +80,12 @@ public class ItemTooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerE
     private void TryShowTooltip()
     {
         if (isHovering) return; // 避免重复触发
+        
+        // 如果正在对话，不显示提示框
+        if (DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive)
+        {
+            return;
+        }
 
         var info = GetCurrentItemInfo();
 

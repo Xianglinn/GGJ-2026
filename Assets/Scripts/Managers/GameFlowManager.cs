@@ -50,6 +50,9 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     /// </summary>
     public GameState PreviousState => _previousState;
 
+    // 当前通过蓝图触发的特殊效果（用于 Scene4 对话分支）
+    public SpecialEffectType LastTriggeredEffect { get; set; } = SpecialEffectType.None;
+
     protected override void OnInitialize()
     {
         base.OnInitialize();
@@ -77,6 +80,20 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
         _currentState = newState;
 
         Debug.Log($"[GameFlowManager] Switching state: {_previousState} -> {_currentState}");
+
+        // 如果从 Gameplay 状态切出，将场景中的物品收回背包，防止丢失
+        if (_previousState == GameState.Gameplay)
+        {
+            ReturnWorldItemsToInventory();
+        }
+
+        // 强制结束任何进行中的对话，防止对话框跨场景残留
+        // 特别是 Scene 5 -> Scene 1 等情况
+        if (DialogueManager.Instance != null)
+        {
+            Debug.Log("[GameFlowManager] Force ending dialogue on state switch.");
+            DialogueManager.Instance.EndDialogue();
+        }
 
         // 触发状态切换事件
         StateChanged?.Invoke(_previousState, _currentState);
@@ -137,6 +154,14 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
             if (UIManager.Instance != null)
             {
                 UIManager.Instance.HideAllPanels();
+
+                // 强制关闭对话面板
+                // 即使 HideAllPanels 已经调用，这里显式调用以确保万无一失
+                if (UIManager.Instance.IsPanelRegistered<DialogueUI>())
+                {
+                    Debug.Log("[GameFlowManager] Explicitly forcing DialogueUI to hide in Scene 1.");
+                    UIManager.Instance.HidePanel<DialogueUI>();
+                }
 
                 // 尝试查找并注册（如果尚未注册，可能是因为物体默认隐藏导致 Awake 未执行）
                 if (!UIManager.Instance.IsPanelRegistered<UIHomePanel>())
@@ -287,25 +312,39 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
         if (scene.name == "Scene4")
         {
             SceneManager.sceneLoaded -= OnScene4Loaded;
-            
-            // 隐藏所有其他面板
+            Debug.Log("[GameFlowManager] Scene4 loaded successfully.");
+
+            // 延迟一帧或确保 UIManager 已同步
             if (UIManager.Instance != null)
             {
+                // 隐藏所有其他面板
                 UIManager.Instance.HideAllPanels();
                 
-                 if (!UIManager.Instance.IsPanelRegistered<UIEpiloguePanel>())
+                // 确保 UIEpiloguePanel 存在并显示
+                // 它是 SceneLocal 的，通常在场景中
+                var panel = FindObjectOfType<UIEpiloguePanel>(true);
+                if (panel != null)
                 {
-                    var panel = FindObjectOfType<UIEpiloguePanel>(true);
-                    if (panel != null)
+                    if (!UIManager.Instance.IsPanelRegistered<UIEpiloguePanel>())
                     {
                         UIManager.Instance.RegisterPanel(panel);
                     }
+                    
+                    Debug.Log("[GameFlowManager] Triggering UIEpiloguePanel show...");
+                    UIManager.Instance.ShowPanel<UIEpiloguePanel, object>(null);
                 }
-
-                if (UIManager.Instance.IsPanelRegistered<UIEpiloguePanel>())
+                else
                 {
-                    UIManager.Instance.ShowPanel<UIEpiloguePanel>();
+                    Debug.LogError("[GameFlowManager] UIEpiloguePanel not found in Scene 4!");
                 }
+            }
+
+            // 清理场景 3 的遗留 UI (如果有)
+            GameObject inventoryCanvas = GameObject.Find("InventoryCanvas");
+            if (inventoryCanvas != null)
+            {
+                Destroy(inventoryCanvas);
+                Debug.Log("[GameFlowManager] Destroyed InventoryCanvas in Scene 4.");
             }
         }
     }
@@ -369,4 +408,61 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     }
 
     #endregion
+
+    /// <summary>
+    /// 将工作台和蓝图中的物品收回背包，防止场景销毁
+    /// </summary>
+    private void ReturnWorldItemsToInventory()
+    {
+        GameObject inventoryCanvas = GameObject.Find("InventoryCanvas");
+        if (inventoryCanvas == null)
+        {
+            Debug.LogWarning("[GameFlowManager] InventoryCanvas not found. Cannot return items.");
+            return;
+        }
+
+        // 获取所有背包槽位
+        InventorySlot[] allSlots = inventoryCanvas.GetComponentsInChildren<InventorySlot>(true);
+        if (allSlots == null || allSlots.Length == 0) return;
+
+        // 遍历所有物品实例
+        var instances = new System.Collections.Generic.List<DragByInterface>(DragByInterface.AllInstances);
+        foreach (var item in instances)
+        {
+            if (item == null || item.gameObject == null) continue;
+
+            // 检查物品是否在场景本地插槽中（工作台或蓝图）
+            bool isInWorldSlot = false;
+            Transform p = item.transform.parent;
+            if (p != null)
+            {
+                if (p.GetComponent<WorkBenchSlot>() != null || p.GetComponent<BlueprintSlot>() != null)
+                {
+                    isInWorldSlot = true;
+                }
+            }
+
+            if (isInWorldSlot)
+            {
+                // 寻找空背包槽位
+                bool foundSlot = false;
+                foreach (var slot in allSlots)
+                {
+                    if (slot.GetItemInfo() == null)
+                    {
+                        item.PlaceInSlot(slot.transform);
+                        slot.SetItem(item);
+                        Debug.Log($"[GameFlowManager] Auto-returned {item.name} to inventory slot {slot.name}");
+                        foundSlot = true;
+                        break;
+                    }
+                }
+
+                if (!foundSlot)
+                {
+                    Debug.LogWarning($"[GameFlowManager] No empty slot for {item.name}! Item might be lost.");
+                }
+            }
+        }
+    }
 }

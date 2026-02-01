@@ -16,67 +16,67 @@ MonoBehaviour:
   lines:
   - characterName: 
     characterPortrait: {fileID: 0}
-    dialogueText: "\uFFFD\uFFFD\uFFFD\u0134\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u04BB\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u5863"
+    dialogueText: "\u5979\u7684\u7A97\u53E3\u6709\u4E00\u4E2A\u98CE\u94C3\u3002"
     voiceClip: {fileID: 0}
     typewriterSpeed: 30
     autoContinue: 0
     autoContinueDelay: 2
     bgmName: Girlscollection
-    backgroundName: 000000
+    backgroundName: 0
   - characterName: 
     characterPortrait: {fileID: 0}
-    dialogueText: "\uFFFD\uFFFD\uFFFD\u0137\uFFFD\uFFFD\uFFFD\uFFFD\u06B8\uFFFD\uFFFD\uFFFD\u05AE\uFFFD\u03E3\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u07F2\u3863\uFFFD\uFFFD\xFF\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u05BB\uFFFD\u043B\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u07A3\uFFFD\uFFFD\u0377\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u0136\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\xA1\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u0138\uFFFD\uFFFD\uFFFD\uFFFD\u8DA8\uFFFD\xF5\u0121\uFFFD"
+    dialogueText: "\u5979\u7684\u623F\u95F4\u5728\u9AD8\u5854\u4E4B\u4E0A\uFF0C\u88AB\u70EC\u76DF\u672F\u529B\u4FDD\u62A4\u7684\u6700\u9AD8\u5C42\u3002\u5979\u6BCF\u65E5\u76F8\u4F34\u7684\u53EA\u6709\u6000\u91CC\u7684\u5A03\u5A03\uFF0C\u548C\u98CE\u58F0\u62C2\u8FC7\u98CE\u94C3\u4EA7\u751F\u7684\u53EE\u549A\u4E50\u7AE0\u2014\u2014\u751A\u81F3\u8FDE\u98CE\u58F0\u90FD\u662F\u5979\u7684\u7236\u4EB2\u8BBE\u5B9A\u597D\u7684\u3002"
     voiceClip: {fileID: 0}
     typewriterSpeed: 30
     autoContinue: 0
     autoContinueDelay: 2
     bgmName: Girlscollection
-    backgroundName: 000000
+    backgroundName: 0
   - characterName: 
     characterPortrait: {fileID: 0}
-    dialogueText: "\uFFFD\uFFFD\u03AA\uFFFD\uFFFD\uFFFD\u0131\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u023B\u05AE\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u023B\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u05A3\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u04AA\u042E\uFFFD\uFFFD\uFFFD\u05E1\uFFFD"
+    dialogueText: "\u56E0\u4E3A\u62C5\u5FC3\u522B\u4EBA\u5229\u7528\u81EA\u7136\u4E4B\u529B\uFF0C\u6784\u6210\u9B45\u60D1\u5979\u7684\u97F3\u4E50\uFF0C\u800C\u540E\u63A7\u5236\u5979\u6765\u8981\u631F\u7236\u4EB2\u3002"
     voiceClip: {fileID: 0}
     typewriterSpeed: 30
     autoContinue: 0
     autoContinueDelay: 2
     bgmName: Girlscollection
-    backgroundName: 000000
-  - characterName: "\u0421\u016E\uFFFD\uFFFD"
+    backgroundName: 0
+  - characterName: "\u5C0F\u5973\u5B69"
     characterPortrait: {fileID: 0}
-    dialogueText: "\uFFFD\uFFFD\xE8\uFFFD\uFFFD\xE8\uFFFD\uFFFD\uFFFD\u04B5\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u0130\uFFFD\uFFFD\uFFFD"
+    dialogueText: "\u9ED1\u732B\u9ED1\u732B\uFF0C\u6211\u7684\u751F\u6D3B\u597D\u65E0\u804A\u554A\u3002"
     voiceClip: {fileID: 0}
     typewriterSpeed: 30
     autoContinue: 0
     autoContinueDelay: 2
     bgmName: Girlscollection
-    backgroundName: 000000
-  - characterName: "\u0421\u016E\uFFFD\uFFFD"
+    backgroundName: 0
+  - characterName: "\u5C0F\u5973\u5B69"
     characterPortrait: {fileID: 0}
-    dialogueText: "\uFFFD\uFFFD\xE8\uFFFD\uFFFD\xE8\uFFFD\uFFFD\uFFFD\uFFFD\u02F5\uFFFD\uFFFD\uFFFD\u04B5\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u02B2\xF4\u02B1\uFFFD\uFFFD\u017B\uFFFD\uFFFD\uFFFD\u04BB\uFFFD\uFFFD\u4EEF\uFFFD\u0623\uFFFD"
+    dialogueText: "\u9ED1\u732B\u9ED1\u732B\uFF0C\u4F60\u8BF4\uFF0C\u6211\u7684\u751F\u6D3B\u4EC0\u4E48\u65F6\u5019\u624D\u4F1A\u6709\u4E00\u70B9\u53D8\u5316\u5462\uFF1F"
     voiceClip: {fileID: 0}
     typewriterSpeed: 30
     autoContinue: 0
     autoContinueDelay: 2
     bgmName: Girlscollection
-    backgroundName: 000000
-  - characterName: "\u0421\u016E\uFFFD\uFFFD"
+    backgroundName: 0
+  - characterName: "\u5C0F\u5973\u5B69"
     characterPortrait: {fileID: 0}
-    dialogueText: "\uFFFD\u8CFF\u02AE\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u02E3\uFFFD\uFFFD\u04B5\u0134\uFFFD\uFFFD\u06BB\uFFFD\uFFFD\u01F0\uFFFD\uFFFD\u7863\uFFFD\uFFFD\u04B9\uFFFD\uFFFD\u02B2\xF4\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u0623\uFFFD"
+    dialogueText: "\u51CC\u6668\u5341\u4E8C\u70B9\u4E86\uFF0C\u6211\u7684\u7A97\u53E3\u8FD8\u662F\u767D\u663C\u3002\u9ED1\u591C\u662F\u4EC0\u4E48\u6837\u7684\u5462\uFF1F"
     voiceClip: {fileID: 0}
     typewriterSpeed: 30
     autoContinue: 0
     autoContinueDelay: 2
     bgmName: Girlscollection
-    backgroundName: 000000
+    backgroundName: 0
   - characterName: 
     characterPortrait: {fileID: 0}
-    dialogueText: "\xFB\uFFFD\u0436\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u053B\u0634\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\u05BB\uFFFD\u0434\uFFFD\uFFFD\u06B5\u0137\uFFFD\uFFFD\u5DE2\uFFFD\uFFFD\uFFFD\u0578\uFFFD\u04BB\uFFFD\u0561\uFFFD\u04BB\u0123\u04BB\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD"
+    dialogueText: "\u6CA1\u6709\u4E1C\u897F\u53EF\u4EE5\u56DE\u7B54\u5979\uFF0C\u53EA\u6709\u7A97\u53E3\u7684\u98CE\u94C3\u53D1\u51FA\u65E5\u590D\u4E00\u65E5\u3001\u4E00\u6A21\u4E00\u6837\u7684\u58F0\u97F3\u3002"
     voiceClip: {fileID: 0}
     typewriterSpeed: 30
     autoContinue: 0
     autoContinueDelay: 2
     bgmName: Girlscollection
-    backgroundName: 000000
+    backgroundName: 0
   choices: []
   nextDialogue: {fileID: 0}
   endsConversation: 0

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 // UI 拖拽物品逻辑（基于 EventSystem）
 public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -14,6 +15,9 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private Vector3 originalScale; // 物品原始缩放
     private Vector3 startScale; // 拖拽前缩放
     private ItemInfo cachedItemInfo; // 缓存的物品信息
+
+    // 用于全局追踪，防止跨场景销毁
+    public static List<DragByInterface> AllInstances = new List<DragByInterface>();
 
     // 供外部取原始缩放
     public Vector3 OriginalScale => originalScale;
@@ -32,8 +36,26 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         if(rectTransform != null)
         {
             originalScale = rectTransform.localScale;
+            // 如果初始缩放为0，尝试捕捉非零缩放
+            if (originalScale == Vector3.zero)
+            {
+                originalScale = Vector3.one;
+            }
+        }
+        else
+        {
+            originalScale = Vector3.one;
         }
         RefreshItemInfo();
+
+        if (!AllInstances.Contains(this))
+        {
+            AllInstances.Add(this);
+        }
+    }
+
+    private void OnDestroy() {
+        AllInstances.Remove(this);
     }
 
     // 记录初始父节点与位置
@@ -58,26 +80,40 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         startParent = transform.parent;
         startAnchoredPosition = rectTransform.anchoredPosition;
         startScale = rectTransform.localScale;
+
+        // 记录当前的 lossyScale (视觉比例)
+        Vector3 worldScaleBefore = transform.lossyScale;
+
         rectTransform.localScale = originalScale;
         if(startParent != null)
         {
-            InventorySlot inventorySlot = startParent.GetComponent<InventorySlot>();
-            if(inventorySlot != null)
+            ISlot slot = startParent.GetComponent<ISlot>();
+            if(slot != null)
             {
-                inventorySlot.ClearItem(this);
-            }
-            WorkBenchSlot workBenchSlot = startParent.GetComponent<WorkBenchSlot>();
-            if(workBenchSlot != null)
-            {
-                workBenchSlot.ClearItem(this);
-            }
-            BlueprintSlot blueprintSlot = startParent.GetComponent<BlueprintSlot>();
-            if(blueprintSlot != null)
-            {
-                blueprintSlot.ClearItem(this);
+                slot.ClearItem(this);
             }
         }
-        if(parentCanvas != null)
+        if (UIManager.Instance != null && UIManager.Instance.PersistentCanvas != null)
+        {
+            parentCanvas = UIManager.Instance.PersistentCanvas;
+            canvasRect = parentCanvas.GetComponent<RectTransform>();
+            
+            // 记录进入新父级前的全局缩放
+            Vector3 visualScale = transform.lossyScale;
+
+            transform.SetParent(parentCanvas.transform, true);
+            
+            // 为了保持视觉大小一致，根据新 Canvas 的 lossyScale 调整 localScale
+            if (parentCanvas.transform.lossyScale.x > 0)
+            {
+                float targetScale = visualScale.x / parentCanvas.transform.lossyScale.x;
+                transform.localScale = new Vector3(targetScale, targetScale, targetScale);
+            }
+
+            transform.SetAsLastSibling();
+            CenterOnPointer(eventData);
+        }
+        else if (parentCanvas != null)
         {
             transform.SetParent(parentCanvas.transform, true);
             transform.SetAsLastSibling();
@@ -101,9 +137,19 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         canvasGroup.blocksRaycasts = true;
         if(!wasDropped)
         {
-            transform.SetParent(startParent, false);
+            rectTransform.SetParent(startParent);
             rectTransform.anchoredPosition = startAnchoredPosition;
             rectTransform.localScale = startScale;
+
+            // 恢复原始槽位的占用引用
+            if (startParent != null)
+            {
+                ISlot slot = startParent.GetComponent<ISlot>();
+                if (slot != null)
+                {
+                    slot.SetItem(this);
+                }
+            }
         }
     }
 

@@ -4,4 +4,6 @@
 public interface ISlot
 {
     ItemInfo GetItemInfo();
+    void SetItem(DragByInterface item);
+    void ClearItem(DragByInterface item);
 }

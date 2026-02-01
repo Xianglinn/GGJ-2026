@@ -67,8 +67,9 @@ public class UIGameplayPanel : UIBasePanel<object>
         }
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         // 解绑按钮事件
         if (toScene2Btn != null)
         {

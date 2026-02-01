@@ -66,7 +66,22 @@ public class UIManager : MonoSingleton<UIManager>
         // 检查并保护 EventSystem
         CheckAndInitEventSystem();
 
+        // 注册场景加载事件，以便在切换场景时再次检查并清理多余的 EventSystem
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+
         Debug.Log("[UIManager] Initialized successfully. Dual Canvas system ready.");
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+    {
+        // 每次场景加载后，检查并清理多余的 EventSystem
+        CheckAndInitEventSystem();
     }
 
     /// <summary>
@@ -187,7 +202,12 @@ public class UIManager : MonoSingleton<UIManager>
 
         if (_registeredPanels.ContainsKey(panelType))
         {
-            Debug.LogWarning($"[UIManager] Panel {panelType.Name} is already registered. Overwriting.");
+            MonoBehaviour oldPanel = _registeredPanels[panelType];
+            if (oldPanel != null && oldPanel != panel)
+            {
+                Debug.LogWarning($"[UIManager] Duplicate Panel {panelType.Name} detected. Destroying old instance to prevent ghosts.");
+                Destroy(oldPanel.gameObject);
+            }
         }
 
         _registeredPanels[panelType] = panel;
@@ -207,13 +227,23 @@ public class UIManager : MonoSingleton<UIManager>
         Canvas targetCanvas = (targetType == CanvasType.Persistent) ? PersistentCanvas : SceneCanvas;
         if (targetCanvas != null)
         {
-            // 只有当父节点不是目标 Canvas 时才重设 parent
-            // 这样可以避免一些 transform 变化带来的副作用，虽然在 Awake 里通常没问题
+            Debug.Log($"[UIManager] Panel {panelType.Name} target canvas: {targetCanvas.name} (InstanceID: {targetCanvas.GetInstanceID()})");
+            Debug.Log($"[UIManager] Panel {panelType.Name} current parent: {panel.transform.parent?.name ?? "null"}");
+
             if (panel.transform.parent != targetCanvas.transform)
             {
+                string oldParentName = panel.transform.parent?.name ?? "null";
                 panel.transform.SetParent(targetCanvas.transform, false);
-                Debug.Log($"[UIManager] Auto-reparented {panelType.Name} to {targetCanvas.name}");
+                Debug.Log($"[UIManager] Auto-reparented {panelType.Name} from {oldParentName} to {targetCanvas.name}");
             }
+            else
+            {
+                Debug.Log($"[UIManager] Panel {panelType.Name} is already a child of {targetCanvas.name}");
+            }
+        }
+        else
+        {
+            Debug.LogError($"[UIManager] Target canvas for {panelType.Name} is NULL!");
         }
 
         panel.gameObject.SetActive(false); // 默认隐藏面板
@@ -267,6 +297,10 @@ public class UIManager : MonoSingleton<UIManager>
             Debug.LogError($"[UIManager] Panel {panelType.Name} could not be cast to type {typeof(T).Name}.");
             return;
         }
+
+        // 先显示面板，再进行初始化
+        // 这样可以确保 OnInitialize 中的 StartCoroutine 等逻辑能够正常运行
+        panel.gameObject.SetActive(true);
 
         // 初始化并显示面板
         panel.OnInitialize(data);
@@ -482,5 +516,32 @@ public class UIManager : MonoSingleton<UIManager>
         }
 
         return false;
+    }
+    /// <summary>
+    /// 设置所有已注册面板的交互状态
+    /// </summary>
+    /// <param name="interactable">是否可交互</param>
+    /// <param name="excludeType">排除的面板类型（可选）</param>
+    public void SetAllPanelsInteraction(bool interactable, System.Type excludeType = null)
+    {
+        foreach (var kvp in _registeredPanels)
+        {
+            if (excludeType != null && kvp.Key == excludeType) continue;
+            
+            if (kvp.Value != null)
+            {
+                UIBasePanel panel = kvp.Value as UIBasePanel;
+                CanvasGroup cg = kvp.Value.GetComponent<CanvasGroup>();
+                if (cg == null)
+                {
+                    cg = kvp.Value.gameObject.AddComponent<CanvasGroup>();
+                }
+                
+                cg.interactable = interactable;
+                // 只有在面板本身允许阻挡射线时，才根据状态开启 blocksRaycasts
+                cg.blocksRaycasts = interactable && (panel == null || panel.BlocksRaycasts);
+            }
+        }
+        Debug.Log($"[UIManager] All panels interaction set to: {interactable} (Excluded: {excludeType?.Name ?? "None"})");
     }
 }

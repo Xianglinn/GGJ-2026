@@ -68,14 +68,43 @@ public class BlueprintController : MonoBehaviour
     }
 
     private void UpdateCompletionState(bool forceNotify){
-        bool complete = AreAllSlotsFilled();
+        bool allSlotsFilled = AreAllSlotsFilled();
+        List<SpecialEffectType> triggered = GetTriggeredEffects();
+        
+        // 判定条件：五个槽位都有物品 且 累计的物品个数超过一定数量(triggered.Count > 0)
+        bool complete = allSlotsFilled && triggered.Count > 0;
+
         if(forceNotify || complete != isComplete)
         {
             isComplete = complete;
             if(isComplete)
             {
+                // 获取触发的特效
+                SpecialEffectType mainEffect = triggered[0];
+                Debug.Log("ITS COMPLETE");
+                Debug.Log($"[BlueprintController] Effect triggered: {mainEffect}");
+
+                // 1. 记录首次解锁一个特殊效果
+                if (DataManager.Instance != null)
+                {
+                    // 记录特殊效果解锁
+                    DataManager.Instance.RecordSpecialEffectUnlock(mainEffect);
+                    // 记录面具制作个数
+                    DataManager.Instance.RecordMaskCrafted();
+
+                    string flagKey = "Effect_Unlocked_" + mainEffect.ToString();
+                    if (!DataManager.Instance.GetStoryFlag(flagKey))
+                    {
+                        DataManager.Instance.SetStoryFlag(flagKey, true);
+                        Debug.Log($"[BlueprintController] First time unlocking effect: {mainEffect}");
+                    }
+                }
+
                 if (GameFlowManager.Instance != null)
                 {
+                    // 2. 设置当前运行的特效
+                    GameFlowManager.Instance.LastTriggeredEffect = mainEffect;
+
                     Debug.Log("Blueprint Complete! Switching to Epilogue.");
                     GameFlowManager.Instance.SwitchState(GameState.Epilogue);
                 }
