@@ -185,6 +185,12 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
                 {
                     Debug.LogWarning("[GameFlowManager] UIHomePanel not registered. Please ensure it's in the scene.");
                 }
+
+                // 播放背景音乐
+                if (AudioManager.Instance != null)
+                {
+                    AudioManager.Instance.PlayMusicByName("Start");
+                }
             }
         }
     }
@@ -192,6 +198,9 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     private void HandlePrologueState()
     {
         Debug.Log("[GameFlowManager] Entering Prologue state");
+
+        // 重置本次运行的特殊效果
+        LastTriggeredEffect = SpecialEffectType.None;
 
         if (resetItemsOnNewRun && IsNewRunEntry())
         {

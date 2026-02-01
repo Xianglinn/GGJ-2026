@@ -65,38 +65,45 @@ public class UIEpiloguePanel : UIBasePanel<object>
         if (GameFlowManager.Instance == null || DialogueManager.Instance == null) return;
 
         SpecialEffectType effect = GameFlowManager.Instance.LastTriggeredEffect;
+        
+        // 明确处理无特效情况
+        if (effect == SpecialEffectType.None)
+        {
+            Debug.Log("[UIEpiloguePanel] No special effect triggered. Playing Common Dialogue directly.");
+            PlayCommonDialogue();
+            return;
+        }
+
         string dialoguePath = "";
 
-        // [修改] 根据特效类型决定对话路径 以及 切换背景
-        switch (effect)
+        // 使用 HasFlag 检查具体的位标志，防止多重特效组合导致逻辑失败
+        if (effect.HasFlag(SpecialEffectType.魔女的面具))
         {
-            case SpecialEffectType.小女孩的珍藏:
-                dialoguePath = "Data/Dialogues/Dialogue_1022";
-                SetBackground(girlEffectBackground); // 切换背景
-                break;
-            case SpecialEffectType.井中之天:
-                dialoguePath = "Data/Dialogues/Dialogue_1023";
-                SetBackground(wellEffectBackground); // 切换背景
-                break;
-            case SpecialEffectType.魔女的面具:
-                dialoguePath = "Data/Dialogues/Dialogue_1021";
-                SetBackground(witchEffectBackground); // 切换背景
-                break;
-            default:
-                break;
+            dialoguePath = "Data/Dialogues/Dialogue_1021";
+            SetBackground(witchEffectBackground);
+        }
+        else if (effect.HasFlag(SpecialEffectType.小女孩的珍藏))
+        {
+            dialoguePath = "Data/Dialogues/Dialogue_1022";
+            SetBackground(girlEffectBackground);
+        }
+        else if (effect.HasFlag(SpecialEffectType.井中之天))
+        {
+            dialoguePath = "Data/Dialogues/Dialogue_1023";
+            SetBackground(wellEffectBackground);
         }
 
         if (!string.IsNullOrEmpty(dialoguePath))
         {
             isHandlingDialogue = true;
             DialogueManager.Instance.OnDialogueEnded.AddListener(OnBranchDialogueEnded);
-            Debug.Log($"[UIEpiloguePanel] Starting Branch Dialogue for effect: {effect}");
+            Debug.Log($"[UIEpiloguePanel] Starting Branch Dialogue: {dialoguePath} for effect: {effect}");
             DialogueManager.Instance.LoadAndStartDialogue(dialoguePath);
         }
         else
         {
-            // 如果没有分支对话，直接播放通用对话
-            Debug.Log("[UIEpiloguePanel] No branch dialogue to play, skipping to Common Dialogue.");
+            // 如果效果位定义了但没对应的对话路径
+            Debug.Log($"[UIEpiloguePanel] Effect {effect} has no defined branch dialogue. Skipping to Common Dialogue.");
             PlayCommonDialogue();
         }
     }
