@@ -8,8 +8,20 @@ public class UIEpiloguePanel : UIBasePanel<object>
     private bool isHandlingDialogue = false;
     private const string COMMON_DIALOGUE_PATH = "Data/Dialogues/Dialogue_102";
 
+    [Header("Background Settings")]
+    [SerializeField] private UnityEngine.UI.Image backgroundImage;
+    [SerializeField] private Sprite commonBackground;
+    [SerializeField] private Sprite witchBackground;
+    [SerializeField] private Sprite wellBackground;
+    [SerializeField] private Sprite girlBackground;
+
     private void Awake()
     {
+        if (backgroundImage == null)
+        {
+            backgroundImage = GetComponent<UnityEngine.UI.Image>();
+        }
+
         // 自动注册到 UIManager
         if (UIManager.Instance != null && !UIManager.Instance.IsPanelRegistered<UIEpiloguePanel>())
         {
@@ -58,17 +70,20 @@ public class UIEpiloguePanel : UIBasePanel<object>
         SpecialEffectType effect = GameFlowManager.Instance.LastTriggeredEffect;
         string dialoguePath = "";
 
-        // 根据特效类型决定对话路径
+        // 根据特效类型决定对话路径和背景
         switch (effect)
         {
             case SpecialEffectType.小女孩的珍藏:
                 dialoguePath = "Data/Dialogues/Dialogue_1022";
+                if (backgroundImage != null) backgroundImage.sprite = girlBackground;
                 break;
             case SpecialEffectType.井中之天:
                 dialoguePath = "Data/Dialogues/Dialogue_1023";
+                if (backgroundImage != null) backgroundImage.sprite = wellBackground;
                 break;
             case SpecialEffectType.魔女的面具:
                 dialoguePath = "Data/Dialogues/Dialogue_1021";
+                if (backgroundImage != null) backgroundImage.sprite = witchBackground;
                 break;
             default:
                 Debug.Log("[UIEpiloguePanel] No special effect triggered or unknown effect.");
@@ -96,6 +111,11 @@ public class UIEpiloguePanel : UIBasePanel<object>
         {
             Debug.Log($"[UIEpiloguePanel] Starting Common Dialogue: {COMMON_DIALOGUE_PATH}");
             
+            if (backgroundImage != null && commonBackground != null)
+            {
+                backgroundImage.sprite = commonBackground;
+            }
+
             // 监听通用对话结束
             // 注意：先移除之前的监听（如果有），防止重复
             DialogueManager.Instance.OnDialogueEnded.RemoveListener(OnCommonDialogueEnded);
