@@ -44,6 +44,10 @@ public class BlueprintSlot : MonoBehaviour, IDropHandler, ISlot
         dragItem.PlaceInSlot(transform);
         currentItem = dragItem;
         UpdateFilledVisual();
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFXByName("Maskfitted");
+        }
         NotifySlotChanged();
     }
 

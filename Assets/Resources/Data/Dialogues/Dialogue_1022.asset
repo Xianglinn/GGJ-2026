@@ -17,7 +17,7 @@ MonoBehaviour:
   - characterName: 
     characterPortrait: {fileID: 0}
     dialogueText: "\u5979\u7684\u7A97\u53E3\u6709\u4E00\u4E2A\u98CE\u94C3\u3002"
-    voiceClip: {fileID: 0}
+    voiceClip: {fileID: 8300000, guid: 0f3231fe99e405248b1ef674ac72f807, type: 3}
     typewriterSpeed: 30
     autoContinue: 0
     autoContinueDelay: 2

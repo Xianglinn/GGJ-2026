@@ -60,11 +60,21 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     {
         base.OnInitialize();
         
-        // 初始化默认状态为 Home
-        _currentState = GameState.Home;
-        _previousState = GameState.Home;
-
         Debug.Log("[GameFlowManager] Initialized with default state: Home");
+    }
+
+    private void Start()
+    {
+        // 专门处理冷启动（直接从编辑器打开 Scene1）的情形
+        if (SceneManager.GetActiveScene().name == "Scene1")
+        {
+            Debug.Log("[GameFlowManager] Start detected Scene1. Manually triggering Home state logic.");
+            HandleHomeState();
+            // 注意：HandleHomeState 会注册 OnScene1Loaded，但因为场景已经加载，
+            // 我们手动调用一次 OnScene1Loaded 的逻辑部分（或者让状态切换重新加载场景）
+            // 这里为了最快响应且不重复加载，直接执行加载后的逻辑
+            OnScene1Loaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+        }
     }
 
     /// <summary>
@@ -189,7 +199,12 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
                 // 播放背景音乐
                 if (AudioManager.Instance != null)
                 {
+                    Debug.Log("[GameFlowManager] OnScene1Loaded: Attempting to play BGM 'Start'");
                     AudioManager.Instance.PlayMusicByName("Start");
+                }
+                else
+                {
+                    Debug.LogWarning("[GameFlowManager] OnScene1Loaded: AudioManager not found!");
                 }
             }
         }

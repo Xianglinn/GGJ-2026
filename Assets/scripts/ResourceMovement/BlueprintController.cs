@@ -108,6 +108,13 @@ public class BlueprintController : MonoBehaviour
                     GameFlowManager.Instance.LastTriggeredEffect = mainEffect;
                     Debug.Log($"[BlueprintController] Set GameFlowManager.LastTriggeredEffect to: {mainEffect}");
 
+                    // 播放合成完毕音效
+                    if (AudioManager.Instance != null)
+                    {
+                        string synthesisSfx = (mainEffect == SpecialEffectType.None) ? "Fitdefault" : "Fitspecial";
+                        AudioManager.Instance.PlaySFXByName(synthesisSfx);
+                    }
+
                     Debug.Log("[BlueprintController] Blueprint Complete! Switching to Epilogue (Scene 4).");
                     GameFlowManager.Instance.SwitchState(GameState.Epilogue);
                 }

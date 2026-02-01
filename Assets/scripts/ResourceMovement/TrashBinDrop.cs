@@ -40,7 +40,10 @@ public class TrashBinDrop : MonoBehaviour, IDropHandler, IPointerEnterHandler, I
             SetBinState(false);
             return;
         }
-
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFXByName("Rubbish");
+        }
         Destroy(dragItem.gameObject);
 
         SetBinState(false);
