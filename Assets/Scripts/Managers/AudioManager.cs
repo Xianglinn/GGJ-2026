@@ -80,6 +80,15 @@ public class AudioManager : MonoSingleton<AudioManager>
         Debug.Log($"[AudioManager] Initialized with {_sfxPoolSize} SFX sources.");
     }
 
+    private void Update()
+    {
+        // 全局鼠标左键点击音效
+        if (Input.GetMouseButtonDown(0))
+        {
+            PlaySFXByName("Click");
+        }
+    }
+
     #region 背景音乐控制
 
     /// <summary>
@@ -264,6 +273,35 @@ public class AudioManager : MonoSingleton<AudioManager>
         else
         {
             Debug.LogWarning("[AudioManager] All SFX sources are in use. Consider increasing pool size.");
+        }
+    }
+
+    /// <summary>
+    /// 通过名称播放音效（从 Resources 加载）
+    /// </summary>
+    /// <param name="sfxName">音效名称</param>
+    /// <param name="volume">音量（0-1）</param>
+    public void PlaySFXByName(string sfxName, float volume = 1f)
+    {
+        if (string.IsNullOrEmpty(sfxName)) return;
+
+        // 1. 优先在 Soundeffect 目录查找
+        AudioClip clip = Resources.Load<AudioClip>("Music/Soundeffect/" + sfxName);
+        
+        // 2. 兼容旧路径或通用路径
+        if (clip == null)
+        {
+            clip = Resources.Load<AudioClip>("Audio/SFX/" + sfxName);
+        }
+
+        if (clip != null)
+        {
+            PlaySFX(clip, volume);
+        }
+        else
+        {
+            // 只有第一次找不到时报错，避免每帧点击都刷屏（针对调试）
+            // Debug.LogWarning($"[AudioManager] SFX clip not found: {sfxName}");
         }
     }
 

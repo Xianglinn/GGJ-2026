@@ -249,6 +249,12 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
                     
                     // 触发新手教程对话
                     CheckAndStartScene2Tutorial();
+
+                    // 播放基础背景音乐
+                    if (AudioManager.Instance != null)
+                    {
+                        AudioManager.Instance.PlayMusicByName("Playing");
+                    }
                 }
             }
         }
@@ -319,6 +325,12 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
                 {
                     UIManager.Instance.ShowPanel<UIGameplayPanel>();
                     
+                }
+
+                // 播放基础背景音乐（如果已经在播则保持）
+                if (AudioManager.Instance != null)
+                {
+                    AudioManager.Instance.PlayMusicByName("Playing");
                 }
             }
         }
