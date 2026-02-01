@@ -113,8 +113,19 @@ public class DataManager : MonoSingleton<DataManager>
     {
         base.OnInitialize();
 
-        // 初始化默认数据
+        // Initialize default data
         _currentData = new GameSaveData();
+
+        // 尝试加载默认存档
+        if (HasSave(_currentSaveSlot))
+        {
+            LoadGame(_currentSaveSlot);
+            Debug.Log("[DataManager] Auto-loaded save from slot " + _currentSaveSlot);
+        }
+        else
+        {
+            Debug.Log("[DataManager] No save found, starting new game.");
+        }
 
         Debug.Log("[DataManager] Initialized successfully.");
     }

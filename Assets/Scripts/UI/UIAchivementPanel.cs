@@ -18,6 +18,13 @@ public class UIAchivementPanel : UIBasePanel<object>
     [Header("UI References")]
     [SerializeField] private Button closeBtn;
     [SerializeField] private List<AchievementUIItem> achievementItems;
+    
+    [Header("Specific Elements")]
+    [SerializeField] private GameObject lockWitch; // 对应魔女成就的遮挡图
+    [SerializeField] private GameObject lockWell; // 对应井成就的遮挡图
+    [SerializeField] private GameObject lockGirl; // 对应女成就的遮挡图
+
+    [SerializeField] private Text countingText;    // 进度计数文本
 
     private void Awake()
     {
@@ -50,6 +57,11 @@ public class UIAchivementPanel : UIBasePanel<object>
         base.OnInitialize(data);
         RefreshUI();
     }
+
+    private void OnEnable()
+    {
+        RefreshUI();
+    }
     
     /// <summary>
     /// 刷新UI显示状态
@@ -63,9 +75,12 @@ public class UIAchivementPanel : UIBasePanel<object>
         }
         
         List<SpecialEffectType> unlocked = DataManager.Instance.GetUnlockedSpecialEffects();
+        int totalAchievements = 3; // 总共有3个成就
+        int unlockedCount = unlocked.Count;
         
-        Debug.Log($"[UIAchivementPanel] Refreshing UI. Unlocked count: {unlocked.Count}");
+        Debug.Log($"[UIAchivementPanel] Refreshing UI. Unlocked count: {unlockedCount}");
 
+        // 刷新列表项 (保留原有通用逻辑)
         foreach (var item in achievementItems)
         {
             if (item == null) continue;
@@ -74,6 +89,37 @@ public class UIAchivementPanel : UIBasePanel<object>
             
             if (item.unlockedState != null) item.unlockedState.SetActive(isUnlocked);
             if (item.lockedState != null) item.lockedState.SetActive(!isUnlocked);
+        }
+
+        // 处理魔女面具的特殊遮挡逻辑
+        bool isWitchUnlocked = unlocked.Contains(SpecialEffectType.魔女的面具);
+        if (lockWitch != null)
+        {
+            // 如果未解锁，显示 lockWitch (遮挡图)
+            // 如果已解锁，隐藏 lockWitch (露出下方的 unlockWitch)
+            lockWitch.SetActive(!isWitchUnlocked);
+        }
+
+        // 处理井的特殊遮挡逻辑
+        bool isWellUnlocked = unlocked.Contains(SpecialEffectType.井中之天);
+        if (lockWell != null)
+        {
+            lockWell.SetActive(!isWellUnlocked);
+        }
+
+        // 处理女的特殊遮挡逻辑
+        bool isGirlUnlocked = unlocked.Contains(SpecialEffectType.小女孩的珍藏);
+        if (lockGirl != null)
+        {
+            lockGirl.SetActive(!isGirlUnlocked);
+        }
+
+        // 2. 更新进度文本
+        if (countingText != null)
+        {
+            // 防止解锁数量超过总数 (理论上不应该，但为了显示安全)
+            int displayCount = Mathf.Min(unlockedCount, totalAchievements); 
+            countingText.text = $"{displayCount}/{totalAchievements}";
         }
     }
 
