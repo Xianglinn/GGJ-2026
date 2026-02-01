@@ -113,6 +113,8 @@ public class DataManager : MonoSingleton<DataManager>
     {
         base.OnInitialize();
 
+        Debug.Log($"[DataManager] PersistentDataPath: {Application.persistentDataPath}");
+
         // Initialize default data
         _currentData = new GameSaveData();
 
