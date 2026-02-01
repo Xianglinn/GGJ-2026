@@ -161,7 +161,7 @@ public class DialogueUI : UIBasePanel<DialogueData>
     /// </summary>
     private void OnDialogueStarted(DialogueData dialogueData)
     {
-        Debug.Log($"[DialogueUI] OnDialogueStarted received for: {dialogueData.dialogueID}");
+        Debug.Log($"[DialogueUI] OnDialogueStarted received for: {dialogueData.dialogueID}. Path: {dialogueData.name}");
         
         // 显示对话面板
         if (UIManager.Instance != null)

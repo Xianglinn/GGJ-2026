@@ -218,6 +218,17 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
                     }
                 }
 
+                // 强制注册 DialogueUI，因为它在 Persistent Canvas 下可能还没来得及在 Awake 中注册（如果初始是隐藏的）
+                if (!UIManager.Instance.IsPanelRegistered<DialogueUI>())
+                {
+                    var dPanel = FindObjectOfType<DialogueUI>(true);
+                    if (dPanel != null)
+                    {
+                        UIManager.Instance.RegisterPanel(dPanel);
+                        Debug.Log("[GameFlowManager] DialogueUI manually registered during Scene2 load.");
+                    }
+                }
+
                 // 显示序章面板
                 if (UIManager.Instance.IsPanelRegistered<UIProloguePanel>())
                 {
@@ -235,14 +246,24 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     /// </summary>
     private void CheckAndStartScene2Tutorial()
     {
-        if (DataManager.Instance == null || DialogueManager.Instance == null) return;
+        if (DataManager.Instance == null || DialogueManager.Instance == null)
+        {
+            Debug.LogWarning($"[GameFlowManager] CheckAndStartScene2Tutorial: DataManager={DataManager.Instance != null}, DialogueManager={DialogueManager.Instance != null}");
+            return;
+        }
 
         bool isTutorialCompleted = DataManager.Instance.GetStoryFlag("Scene2_Tutorial_Completed");
+        Debug.Log($"[GameFlowManager] Scene2_Tutorial_Completed flag: {isTutorialCompleted}");
+        
         if (!isTutorialCompleted)
         {
             Debug.Log("[GameFlowManager] Starting Scene2 Tutorial...");
             // 延迟启动对话，确保所有系统初始化完成
             StartCoroutine(StartTutorialDialogueDelayed());
+        }
+        else
+        {
+            Debug.Log("[GameFlowManager] Scene2 Tutorial already completed, skipping.");
         }
     }
 
@@ -251,9 +272,12 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     /// </summary>
     private System.Collections.IEnumerator StartTutorialDialogueDelayed()
     {
-        yield return new WaitForSeconds(0.5f);
+        Debug.Log("[GameFlowManager] Waiting for dialogue systems to settle...");
+        yield return new WaitForSeconds(0.8f); // Slightly increased delay
+        Debug.Log("[GameFlowManager] Triggering Dialogue_101 via DialogueManager");
         DialogueManager.Instance.LoadAndStartDialogue("Data/Dialogues/Dialogue_101");
         DataManager.Instance.SetStoryFlag("Scene2_Tutorial_Completed", true);
+        DataManager.Instance.SaveGame(0); // Save to persist the flag
     }
 
     private void HandleGameplayState()

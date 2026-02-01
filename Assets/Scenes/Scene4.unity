@@ -424,6 +424,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89b8a9a24e79d42448f494eb020834da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgroundImage: {fileID: 0}
+  commonBackground: {fileID: 21300000, guid: 2dae5665bfc2e1b47b3efafc40aa17f7, type: 3}
+  witchBackground: {fileID: 21300000, guid: 36c1163b05185dd42b8df0aa7bf36f64, type: 3}
+  wellBackground: {fileID: 21300000, guid: 36c1163b05185dd42b8df0aa7bf36f64, type: 3}
+  girlBackground: {fileID: 21300000, guid: 36c1163b05185dd42b8df0aa7bf36f64, type: 3}
 --- !u!114 &1509013114
 MonoBehaviour:
   m_ObjectHideFlags: 0
