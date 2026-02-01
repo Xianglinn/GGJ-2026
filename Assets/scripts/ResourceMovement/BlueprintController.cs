@@ -71,38 +71,40 @@ public class BlueprintController : MonoBehaviour
         bool allSlotsFilled = AreAllSlotsFilled();
         List<SpecialEffectType> triggered = GetTriggeredEffects();
         
-        // 判定条件：五个槽位都有物品 且 累计的物品个数超过一定数量(triggered.Count > 0)
-        bool complete = allSlotsFilled && triggered.Count > 0;
+        // 判定条件：五个槽位都有物品即可切换 (不再强制要求特殊效果)
+        bool complete = allSlotsFilled;
 
         if(forceNotify || complete != isComplete)
         {
             isComplete = complete;
             if(isComplete)
             {
-                // 获取触发的特效
-                SpecialEffectType mainEffect = triggered[0];
-                Debug.Log("ITS COMPLETE");
-                Debug.Log($"[BlueprintController] Effect triggered: {mainEffect}");
+                // 获取触发的特效（如果有的话，否则为 None）
+                SpecialEffectType mainEffect = triggered.Count > 0 ? triggered[0] : SpecialEffectType.None;
+                Debug.Log($"[BlueprintController] Complete! Main effect: {mainEffect}");
 
-                // 1. 记录首次解锁一个特殊效果
                 if (DataManager.Instance != null)
                 {
-                    // 记录特殊效果解锁
-                    DataManager.Instance.RecordSpecialEffectUnlock(mainEffect);
-                    // 记录面具制作个数
-                    DataManager.Instance.RecordMaskCrafted();
-
-                    string flagKey = "Effect_Unlocked_" + mainEffect.ToString();
-                    if (!DataManager.Instance.GetStoryFlag(flagKey))
+                    // 只有在触发了特殊效果时才记录解锁
+                    if (mainEffect != SpecialEffectType.None)
                     {
-                        DataManager.Instance.SetStoryFlag(flagKey, true);
-                        Debug.Log($"[BlueprintController] First time unlocking effect: {mainEffect}");
+                        DataManager.Instance.RecordSpecialEffectUnlock(mainEffect);
+                        
+                        string flagKey = "Effect_Unlocked_" + mainEffect.ToString();
+                        if (!DataManager.Instance.GetStoryFlag(flagKey))
+                        {
+                            DataManager.Instance.SetStoryFlag(flagKey, true);
+                            Debug.Log($"[BlueprintController] First time unlocking effect: {mainEffect}");
+                        }
                     }
+                    
+                    // 总是记录面具制作个数
+                    DataManager.Instance.RecordMaskCrafted();
                 }
 
                 if (GameFlowManager.Instance != null)
                 {
-                    // 2. 设置当前运行的特效
+                    // 设置当前运行的特效供 Scene4 使用
                     GameFlowManager.Instance.LastTriggeredEffect = mainEffect;
 
                     Debug.Log("Blueprint Complete! Switching to Epilogue.");
@@ -110,6 +112,7 @@ public class BlueprintController : MonoBehaviour
                 }
                 else
                 {
+                    GameFlowManager.Instance.LastTriggeredEffect = SpecialEffectType.None;
                    Debug.LogError("GameFlowManager instance not found!");
                 }
             }
