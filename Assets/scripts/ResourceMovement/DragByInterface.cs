@@ -173,6 +173,13 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         wasDropped = true;
         transform.SetParent(slotTransform, false);
         rectTransform.anchoredPosition = Vector2.zero;
+
+        // 播放放置音效
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFXByName("Itemsadorbt");
+        }
+
         SlotSizeFitter fitter = slotTransform.GetComponent<SlotSizeFitter>();
         if(fitter != null)
         {
