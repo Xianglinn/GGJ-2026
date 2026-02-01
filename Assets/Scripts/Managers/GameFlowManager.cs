@@ -87,6 +87,14 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
             ReturnWorldItemsToInventory();
         }
 
+        // 强制结束任何进行中的对话，防止对话框跨场景残留
+        // 特别是 Scene 5 -> Scene 1 等情况
+        if (DialogueManager.Instance != null)
+        {
+            Debug.Log("[GameFlowManager] Force ending dialogue on state switch.");
+            DialogueManager.Instance.EndDialogue();
+        }
+
         // 触发状态切换事件
         StateChanged?.Invoke(_previousState, _currentState);
 
@@ -146,6 +154,14 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
             if (UIManager.Instance != null)
             {
                 UIManager.Instance.HideAllPanels();
+
+                // 强制关闭对话面板
+                // 即使 HideAllPanels 已经调用，这里显式调用以确保万无一失
+                if (UIManager.Instance.IsPanelRegistered<DialogueUI>())
+                {
+                    Debug.Log("[GameFlowManager] Explicitly forcing DialogueUI to hide in Scene 1.");
+                    UIManager.Instance.HidePanel<DialogueUI>();
+                }
 
                 // 尝试查找并注册（如果尚未注册，可能是因为物体默认隐藏导致 Awake 未执行）
                 if (!UIManager.Instance.IsPanelRegistered<UIHomePanel>())

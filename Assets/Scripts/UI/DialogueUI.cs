@@ -146,7 +146,7 @@ public class DialogueUI : UIBasePanel<DialogueData>
     }
     public override void Hide()
     {
-        Debug.Log("[DialogueUI] Hide() called.");
+        Debug.Log($"[DialogueUI] Hide() called. GameObject active: {gameObject.activeSelf}");
         // 停止打字机协程
         if (_typewriterCoroutine != null)
         {

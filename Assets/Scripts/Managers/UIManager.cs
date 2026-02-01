@@ -66,7 +66,22 @@ public class UIManager : MonoSingleton<UIManager>
         // 检查并保护 EventSystem
         CheckAndInitEventSystem();
 
+        // 注册场景加载事件，以便在切换场景时再次检查并清理多余的 EventSystem
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+
         Debug.Log("[UIManager] Initialized successfully. Dual Canvas system ready.");
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+    {
+        // 每次场景加载后，检查并清理多余的 EventSystem
+        CheckAndInitEventSystem();
     }
 
     /// <summary>
@@ -187,7 +202,12 @@ public class UIManager : MonoSingleton<UIManager>
 
         if (_registeredPanels.ContainsKey(panelType))
         {
-            Debug.LogWarning($"[UIManager] Panel {panelType.Name} is already registered. Overwriting.");
+            MonoBehaviour oldPanel = _registeredPanels[panelType];
+            if (oldPanel != null && oldPanel != panel)
+            {
+                Debug.LogWarning($"[UIManager] Duplicate Panel {panelType.Name} detected. Destroying old instance to prevent ghosts.");
+                Destroy(oldPanel.gameObject);
+            }
         }
 
         _registeredPanels[panelType] = panel;
