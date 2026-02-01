@@ -62,13 +62,13 @@ public class UIEpiloguePanel : UIBasePanel<object>
         switch (effect)
         {
             case SpecialEffectType.小女孩的珍藏:
-                dialoguePath = "Data/Dialogues/Dialogue_1021";
-                break;
-            case SpecialEffectType.井中之天:
                 dialoguePath = "Data/Dialogues/Dialogue_1022";
                 break;
-            case SpecialEffectType.魔女的面具:
+            case SpecialEffectType.井中之天:
                 dialoguePath = "Data/Dialogues/Dialogue_1023";
+                break;
+            case SpecialEffectType.魔女的面具:
+                dialoguePath = "Data/Dialogues/Dialogue_1021";
                 break;
             default:
                 Debug.Log("[UIEpiloguePanel] No special effect triggered or unknown effect.");
