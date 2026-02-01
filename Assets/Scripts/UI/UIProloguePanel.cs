@@ -53,6 +53,11 @@ public class UIProloguePanel : UIBasePanel<object>
         {
             panelSync.LoadFromManager();
         }
+        SceneItemPanelSync[] sceneSyncs = FindObjectsOfType<SceneItemPanelSync>(true);
+        for(int i = 0; i < sceneSyncs.Length; i++)
+        {
+            sceneSyncs[i].LoadFromManager();
+        }
 
         // 初始化UI显示
         if (titleText != null)
@@ -96,6 +101,11 @@ public class UIProloguePanel : UIBasePanel<object>
             if(panelSync != null)
             {
                 panelSync.SaveToManager();
+            }
+            SceneItemPanelSync[] sceneSyncs = FindObjectsOfType<SceneItemPanelSync>(true);
+            for(int i = 0; i < sceneSyncs.Length; i++)
+            {
+                sceneSyncs[i].SaveToManager();
             }
             GameFlowManager.Instance.SwitchState(GameState.Gameplay);
         }

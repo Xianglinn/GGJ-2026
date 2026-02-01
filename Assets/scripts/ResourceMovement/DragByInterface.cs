@@ -15,6 +15,8 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private Vector3 originalScale; // 物品原始缩放
     private Vector3 startScale; // 拖拽前缩放
     private ItemInfo cachedItemInfo; // 缓存的物品信息
+    [SerializeField] private bool requireItemInfo = true;
+    private bool canDrag = true;
 
     // 用于全局追踪，防止跨场景销毁
     public static List<DragByInterface> AllInstances = new List<DragByInterface>();
@@ -47,6 +49,7 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             originalScale = Vector3.one;
         }
         RefreshItemInfo();
+        UpdateCanDrag();
 
         if (!AllInstances.Contains(this))
         {
@@ -69,11 +72,11 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     // 开始拖拽：清理旧槽位、置顶、居中到鼠标
     public void OnBeginDrag(PointerEventData eventData){
-        if(rectTransform == null)
+        UpdateCanDrag();
+        if(!canDrag || rectTransform == null)
         {
             return;
         }
-
         wasDropped = false;
         RefreshCanvasRefs();
         RefreshItemInfo();
@@ -124,6 +127,10 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     // 拖拽过程中跟随鼠标
     public void OnDrag(PointerEventData eventData){
+        if(!canDrag)
+        {
+            return;
+        }
         if(parentCanvas == null)
         {
             return;
@@ -134,6 +141,10 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     // 结束拖拽：没放入则回到原位置
     public void OnEndDrag(PointerEventData eventData){
+        if(!canDrag)
+        {
+            return;
+        }
         canvasGroup.blocksRaycasts = true;
         if(!wasDropped)
         {
@@ -192,6 +203,10 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             cachedItemInfo = GetComponentInChildren<ItemInfo>();
         }
+    }
+
+    private void UpdateCanDrag(){
+        canDrag = !requireItemInfo || cachedItemInfo != null;
     }
 
     private void RefreshCanvasRefs(){

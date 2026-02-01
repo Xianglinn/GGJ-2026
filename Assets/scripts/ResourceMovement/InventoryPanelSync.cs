@@ -16,12 +16,12 @@ public class InventoryPanelSync : MonoBehaviour
     [SerializeField] private bool enableDebug;
 
     public void SaveToManager(){
-        if(InventoryManager.Instance == null)
+        if(ItemLocationManager.Instance == null)
         {
             return;
         }
-        List<InventoryItemState> states = CollectStates();
-        InventoryManager.Instance.SetItems(states);
+        List<ItemLocationState> states = CollectStates();
+        ItemLocationManager.Instance.SetItemsForLocation(ItemLocation.Inventory, states);
         if(enableDebug)
         {
             Debug.Log($"[InventoryPanelSync] Saved items: {FormatIds(states)}", this);
@@ -29,60 +29,64 @@ public class InventoryPanelSync : MonoBehaviour
     }
 
     public void LoadFromManager(){
-        if(InventoryManager.Instance == null)
+        if(ItemLocationManager.Instance == null)
         {
             return;
         }
 
-        List<InventoryItemState> items = InventoryManager.Instance.GetItems();
+        List<ItemLocationState> items = ItemLocationManager.Instance.GetItemsForLocation(ItemLocation.Inventory);
         ClearSlots();
         if(enableDebug)
         {
             Debug.Log($"[InventoryPanelSync] Loading items: {FormatIds(items)}", this);
         }
 
-        int slotIndex = 0;
-        for(int i = 0; i < items.Count && slotIndex < slots.Count; i++)
+        bool[] occupied = new bool[slots.Count];
+        List<ItemLocationState> unplaced = new List<ItemLocationState>();
+
+        for(int i = 0; i < items.Count; i++)
         {
-            InventoryItemState state = items[i];
-            GameObject prefab = FindPrefab(state.itemId);
-            if(prefab == null)
-            {
-                if(enableDebug)
-                {
-                    Debug.LogWarning($"[InventoryPanelSync] Prefab not found for itemId: {state.itemId}", this);
-                }
-                continue;
-            }
-
-            InventorySlot slot = slots[slotIndex];
-            if(slot == null)
+            ItemLocationState state = items[i];
+            if(state == null)
             {
                 continue;
             }
 
-            GameObject instance = Instantiate(prefab, slot.transform);
-            DragByInterface dragItem = instance.GetComponent<DragByInterface>();
-            if(dragItem == null)
+            int targetIndex = state.slotIndex;
+            if(targetIndex < 0 || targetIndex >= slots.Count || occupied[targetIndex])
             {
-                Destroy(instance);
+                unplaced.Add(state);
                 continue;
             }
 
-            ItemInfo info = instance.GetComponent<ItemInfo>();
-            if(info != null)
+            if(SpawnIntoSlot(state, slots[targetIndex]))
             {
-                info.ApplyState(state);
+                occupied[targetIndex] = true;
+            }
+            else
+            {
+                unplaced.Add(state);
+            }
+        }
+
+        for(int i = 0; i < unplaced.Count; i++)
+        {
+            ItemLocationState state = unplaced[i];
+            int freeIndex = FindFirstFreeSlotIndex(occupied);
+            if(freeIndex < 0)
+            {
+                break;
             }
 
-            dragItem.PlaceInSlot(slot.transform);
-            slot.SetItem(dragItem);
-            slotIndex++;
+            if(SpawnIntoSlot(state, slots[freeIndex]))
+            {
+                occupied[freeIndex] = true;
+            }
         }
     }
 
-    private List<InventoryItemState> CollectStates(){
-        List<InventoryItemState> states = new List<InventoryItemState>();
+    private List<ItemLocationState> CollectStates(){
+        List<ItemLocationState> states = new List<ItemLocationState>();
         for(int i = 0; i < slots.Count; i++)
         {
             InventorySlot slot = slots[i];
@@ -96,7 +100,7 @@ public class InventoryPanelSync : MonoBehaviour
             {
                 continue;
             }
-            states.Add(info.ToState());
+            states.Add(info.ToLocationState(ItemLocation.Inventory, i, Vector2.zero));
         }
         return states;
     }
@@ -113,7 +117,7 @@ public class InventoryPanelSync : MonoBehaviour
         }
     }
 
-    private GameObject FindPrefab(string itemId){
+    private GameObject FindTemplate(string itemId){
         for(int i = 0; i < prefabs.Count; i++)
         {
             ItemPrefabEntry entry = prefabs[i];
@@ -122,10 +126,14 @@ public class InventoryPanelSync : MonoBehaviour
                 return entry.prefab;
             }
         }
+        if(ItemTemplateLibrary.Instance != null)
+        {
+            return ItemTemplateLibrary.Instance.GetTemplate(itemId);
+        }
         return null;
     }
 
-    private string FormatIds(List<InventoryItemState> items){
+    private string FormatIds(List<ItemLocationState> items){
         if(items == null || items.Count == 0)
         {
             return "(none)";
@@ -137,5 +145,60 @@ public class InventoryPanelSync : MonoBehaviour
             sb.Append(items[i].itemId);
         }
         return sb.ToString();
+    }
+
+    private bool SpawnIntoSlot(ItemLocationState state, InventorySlot slot){
+        if(state == null || slot == null)
+        {
+            return false;
+        }
+
+        GameObject template = FindTemplate(state.itemId);
+        if(template == null)
+        {
+            if(enableDebug)
+            {
+                Debug.LogWarning($"[InventoryPanelSync] Template not found for itemId: {state.itemId}", this);
+            }
+            return false;
+        }
+
+        GameObject instance = Instantiate(template, slot.transform);
+        if(!instance.activeSelf)
+        {
+            instance.SetActive(true);
+        }
+        DragByInterface dragItem = instance.GetComponent<DragByInterface>();
+        if(dragItem == null)
+        {
+            Destroy(instance);
+            return false;
+        }
+
+        ItemInfo info = instance.GetComponent<ItemInfo>();
+        if(info != null)
+        {
+            info.ApplyState(state);
+        }
+
+        dragItem.PlaceInSlot(slot.transform);
+        slot.SetItem(dragItem);
+        return true;
+    }
+
+    private int FindFirstFreeSlotIndex(bool[] occupied){
+        if(occupied == null)
+        {
+            return -1;
+        }
+
+        for(int i = 0; i < occupied.Length; i++)
+        {
+            if(!occupied[i])
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 }

@@ -24,7 +24,7 @@ public class ItemInfo : MonoBehaviour
     public SpecialEffectType SpecialEffects => specialEffects;
 
     private void Start(){
-        if(InventoryManager.Instance != null && InventoryManager.Instance.HasItem(ItemId))
+        if(ItemLocationManager.Instance != null && ItemLocationManager.Instance.HasItemInLocation(ItemId, ItemLocation.Inventory))
         {
             gameObject.SetActive(false);
         }
@@ -42,7 +42,20 @@ public class ItemInfo : MonoBehaviour
         return new InventoryItemState(ItemId, isProcessed, specialEffects);
     }
 
+    public ItemLocationState ToLocationState(ItemLocation location, int slotIndex, Vector2 anchoredPosition){
+        return new ItemLocationState(ItemId, location, slotIndex, anchoredPosition, isProcessed, specialEffects);
+    }
+
     public void ApplyState(InventoryItemState state){
+        if(state == null)
+        {
+            return;
+        }
+        isProcessed = state.isProcessed;
+        specialEffects = state.specialEffects;
+    }
+
+    public void ApplyState(ItemLocationState state){
         if(state == null)
         {
             return;
