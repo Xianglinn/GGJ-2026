@@ -17,6 +17,7 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private ItemInfo cachedItemInfo; // 缓存的物品信息
     [SerializeField] private bool requireItemInfo = true;
     private bool canDrag = true;
+    private Transform lastSlotTransform;
 
     // 用于全局追踪，防止跨场景销毁
     public static List<DragByInterface> AllInstances = new List<DragByInterface>();
@@ -25,6 +26,7 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public Vector3 OriginalScale => originalScale;
     // 供外部读取物品信息
     public ItemInfo ItemInfo => cachedItemInfo;
+    public Transform LastSlotTransform => lastSlotTransform;
 
     // 初始化组件与缓存
     private void Awake(){
@@ -64,6 +66,7 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     // 记录初始父节点与位置
     private void Start(){
         startParent = transform.parent;
+        lastSlotTransform = startParent;
         if(rectTransform != null)
         {
             startAnchoredPosition = rectTransform.anchoredPosition;
@@ -81,6 +84,7 @@ public class DragByInterface : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         RefreshCanvasRefs();
         RefreshItemInfo();
         startParent = transform.parent;
+        lastSlotTransform = startParent;
         startAnchoredPosition = rectTransform.anchoredPosition;
         startScale = rectTransform.localScale;
 

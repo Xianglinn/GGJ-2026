@@ -246,6 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!1 &18954334
 GameObject:
   m_ObjectHideFlags: 0
@@ -598,6 +599,7 @@ GameObject:
   - component: {fileID: 327954915}
   - component: {fileID: 327954918}
   - component: {fileID: 327954917}
+  - component: {fileID: 327954919}
   m_Layer: 0
   m_Name: WBcenter
   m_TagString: Untagged
@@ -686,6 +688,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a47d502c8103c7a479b45107933be746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &327954919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 327954913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caf3b2a8ac9213145bb6200ed4702c14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onlyUnprocessed: 1
+  overrides:
+  - itemId: bestcat
+    effects: 1
+    replaceEffects: 1
+  replacements: []
 --- !u!1 &329086523
 GameObject:
   m_ObjectHideFlags: 0
@@ -1465,6 +1485,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 1
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &654842822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2654,6 +2676,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 1
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &1527397994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2691,6 +2715,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 1
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &1557343284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2803,6 +2829,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 1
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &1658576552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2943,6 +2971,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 1
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &1697169563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3164,6 +3194,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 1
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &1894598416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3281,6 +3313,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 1
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &2021985778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3683,6 +3717,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 1
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &7299275302790889989
 MonoBehaviour:
   m_ObjectHideFlags: 0

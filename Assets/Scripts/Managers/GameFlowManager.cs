@@ -53,6 +53,9 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     // 当前通过蓝图触发的特殊效果（用于 Scene4 对话分支）
     public SpecialEffectType LastTriggeredEffect { get; set; } = SpecialEffectType.None;
 
+    [Header("Run Reset")]
+    [SerializeField] private bool resetItemsOnNewRun = true;
+
     protected override void OnInitialize()
     {
         base.OnInitialize();
@@ -189,12 +192,33 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
     private void HandlePrologueState()
     {
         Debug.Log("[GameFlowManager] Entering Prologue state");
+
+        if (resetItemsOnNewRun && IsNewRunEntry())
+        {
+            ResetRuntimeItems();
+        }
         
         // 加载 Scene2
         LoadScene("Scene2");
         
         // 场景加载完成后显示 UIProloguePanel
         SceneManager.sceneLoaded += OnScene2Loaded;
+    }
+
+    private bool IsNewRunEntry()
+    {
+        return _previousState == GameState.Home
+            || _previousState == GameState.LevelMap
+            || _previousState == GameState.Epilogue;
+    }
+
+    private void ResetRuntimeItems()
+    {
+        if (ItemLocationManager.Instance != null)
+        {
+            ItemLocationManager.Instance.Clear();
+            Debug.Log("[GameFlowManager] Cleared item locations for new run.");
+        }
     }
     
     private void OnScene2Loaded(Scene scene, LoadSceneMode mode)
@@ -436,7 +460,7 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
             Transform p = item.transform.parent;
             if (p != null)
             {
-                if (p.GetComponent<WorkBenchSlot>() != null || p.GetComponent<BlueprintSlot>() != null)
+                if (p.GetComponent<WorkBenchSlot>() != null || p.GetComponent<BlueprintSlot>() != null || p.GetComponent<ProcessingSlot>() != null)
                 {
                     isInWorldSlot = true;
                 }

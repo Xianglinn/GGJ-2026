@@ -385,6 +385,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 1
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &194813989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -397,6 +399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &194813990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -492,6 +495,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 1
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &234513441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -504,6 +509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &234513442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1236,6 +1242,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 1
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &997897051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1248,6 +1256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &997897052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1732,6 +1741,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 1
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &1128310034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1744,6 +1755,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &1128310035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1852,6 +1864,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &1134732049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1864,6 +1878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &1134732050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1916,12 +1931,12 @@ GameObject:
   - component: {fileID: 1295123590}
   - component: {fileID: 1295123589}
   m_Layer: 5
-  m_Name: crystal_ball (20)
+  m_Name: candle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1295123588
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1938,8 +1953,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -477.68436, y: -184.44766}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -454.57, y: -57.295}
+  m_SizeDelta: {x: 59.13, y: 132.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1295123589
 MonoBehaviour:
@@ -1953,12 +1968,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e74a724fb6286ea428c269516f549183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemId: crystal_ball
-  descriptionCN: "\u5F53\u5143\u7D20\u8BDE\u751F\u9B54\u6CD5\uFF0C\u6C34\u6676\u7403\u5C31\u6210\u4E3A\u4E86\u9B54\u5973\u6700\u5F97\u529B\u7684\u5DE5\u5177\u4E4B\u4E00\u3002"
+  itemId: candle
+  descriptionCN: "\u878D\u5316\u540E\uFF0C\u6676\u83B9\u7684\u6837\u5B50\u72B9\u5982\u773C\u6CEA\u3002"
   partType: 0
   isProcessed: 0
-  canBeProcessed: 0
-  specialEffects: 1
+  canBeProcessed: 1
+  specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 21300000, guid: 529315571dad79e46a741c11be6ac075, type: 3}
 --- !u!114 &1295123590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1971,6 +1988,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &1295123591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1991,7 +2009,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 554c2b46230dddb4bb42bf6ed4def835, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2066,6 +2084,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 1
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &1427698702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2078,6 +2098,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &1427698703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2956,7 +2977,7 @@ GameObject:
   - component: {fileID: 2007971159}
   - component: {fileID: 2007971158}
   m_Layer: 5
-  m_Name: sheep (1)
+  m_Name: bestcat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3009,8 +3030,10 @@ MonoBehaviour:
   descriptionCN: "\u4E00\u53EA\u53EF\u7231\u7684\u732B\u732B\u73A9\u5076\u3002"
   partType: 0
   isProcessed: 0
-  canBeProcessed: 0
+  canBeProcessed: 1
   specialEffects: 0
+  unprocessedSprite: {fileID: 21300000, guid: e0f28ff3f2d7d484aa269c23fa02b745, type: 3}
+  processedSprite: {fileID: 21300000, guid: 0b0c05d4ac465e841a49b00acfdac5fb, type: 3}
 --- !u!114 &2007971160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3023,6 +3046,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &2007971161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3179,6 +3203,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 4
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &609211564844720596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3197,6 +3223,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 1
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!222 &609964840843565314
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3223,6 +3251,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 1
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!1 &661077280580875288
 GameObject:
   m_ObjectHideFlags: 0
@@ -3323,6 +3353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!222 &871716918791985724
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3386,6 +3417,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &1316831663249054212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3398,6 +3431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!222 &1381584398953139563
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3432,6 +3466,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 2
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &1644633875585937327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3516,6 +3552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &1826641529425339489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3534,6 +3571,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 2
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!1 &1860624944954515073
 GameObject:
   m_ObjectHideFlags: 0
@@ -3719,6 +3758,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &2510395659416400962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3731,6 +3771,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!222 &2600710931859662660
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3751,6 +3792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &2678145745787511063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3769,6 +3811,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 3
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &2686416285275321294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3781,6 +3825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!1 &2758564613825460290
 GameObject:
   m_ObjectHideFlags: 0
@@ -3814,6 +3859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &2913218000514367790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3832,6 +3878,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 1
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!224 &3027726962710518727
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3915,6 +3963,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &3432146095585678363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3963,6 +4013,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!224 &3534409803153445470
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4075,6 +4127,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 4
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!222 &3950290812715372459
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4101,6 +4155,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 4
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!1 &4080198326804345785
 GameObject:
   m_ObjectHideFlags: 0
@@ -4140,6 +4196,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!1 &4286244129331317955
 GameObject:
   m_ObjectHideFlags: 0
@@ -4203,6 +4261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!222 &4572754387364376113
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4250,6 +4309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &4639503192408673267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4400,6 +4460,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 2
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!224 &5328500403655654593
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4462,6 +4524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &5547052079573453452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4523,6 +4586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &5692380309966595904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4571,6 +4635,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!1 &5872112921349192036
 GameObject:
   m_ObjectHideFlags: 0
@@ -4604,6 +4670,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &5879548545373524409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4652,6 +4719,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 2
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &6249017685980499917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4694,6 +4763,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &6253048577577116663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4862,6 +4932,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 4
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &6680474063864171728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4892,6 +4964,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 1
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 21300000, guid: c362096417e39ff45b45fe675ded75b0, type: 3}
 --- !u!114 &7010420196005371959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4904,6 +4978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &7010420196005371960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5052,6 +5127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &7326535712069727757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5070,6 +5146,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!1 &7360819581828279687
 GameObject:
   m_ObjectHideFlags: 0
@@ -5103,6 +5181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &7433179938230999556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5115,6 +5194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &7433179938230999557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5262,6 +5342,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!222 &7997270690922862873
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5282,6 +5363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &8012064251594992513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5373,6 +5455,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 1
   specialEffects: 0
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 21300000, guid: eb58806873777aa4b9c213d4b0268b8a, type: 3}
 --- !u!114 &8556266901286418568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5545,6 +5629,8 @@ MonoBehaviour:
   isProcessed: 0
   canBeProcessed: 0
   specialEffects: 1
+  unprocessedSprite: {fileID: 0}
+  processedSprite: {fileID: 0}
 --- !u!114 &9122291979165354602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5569,6 +5655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f0938ad0b7bb40ae46dba3092f3bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireItemInfo: 1
 --- !u!114 &9166391898479861448
 MonoBehaviour:
   m_ObjectHideFlags: 0
