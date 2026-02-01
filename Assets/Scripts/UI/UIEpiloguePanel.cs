@@ -95,7 +95,28 @@ public class UIEpiloguePanel : UIBasePanel<object>
         if (DialogueManager.Instance != null)
         {
             Debug.Log($"[UIEpiloguePanel] Starting Common Dialogue: {COMMON_DIALOGUE_PATH}");
+            
+            // 监听通用对话结束
+            // 注意：先移除之前的监听（如果有），防止重复
+            DialogueManager.Instance.OnDialogueEnded.RemoveListener(OnCommonDialogueEnded);
+            DialogueManager.Instance.OnDialogueEnded.AddListener(OnCommonDialogueEnded);
+            
             DialogueManager.Instance.LoadAndStartDialogue(COMMON_DIALOGUE_PATH);
+        }
+    }
+
+    private void OnCommonDialogueEnded()
+    {
+        Debug.Log("[UIEpiloguePanel] Common Dialogue Ended. Transitioning to LevelMap (Scene 5)...");
+        
+        if (DialogueManager.Instance != null)
+        {
+            DialogueManager.Instance.OnDialogueEnded.RemoveListener(OnCommonDialogueEnded);
+        }
+
+        if (GameFlowManager.Instance != null)
+        {
+            GameFlowManager.Instance.SwitchState(GameState.LevelMap);
         }
     }
 

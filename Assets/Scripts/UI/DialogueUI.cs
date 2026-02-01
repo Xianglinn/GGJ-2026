@@ -309,6 +309,18 @@ public class DialogueUI : UIBasePanel<DialogueData>
         // 通知对话管理器
         DialogueManager.Instance?.SelectChoice(choiceIndex);
     }
+    private void Update()
+    {
+        // 监听空格键和回车键推进对话
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
+        {
+            if (gameObject.activeInHierarchy && canvasGroup.interactable)
+            {
+                OnContinueClicked();
+            }
+        }
+    }
+
     #endregion
     #region 打字机效果
     /// <summary>
