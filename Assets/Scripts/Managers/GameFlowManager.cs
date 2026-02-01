@@ -464,5 +464,11 @@ public class GameFlowManager : MonoSingleton<GameFlowManager>
                 }
             }
         }
+
+        InventoryPanelSync panelSync = FindObjectOfType<InventoryPanelSync>(true);
+        if(panelSync != null)
+        {
+            panelSync.SaveToManager();
+        }
     }
 }
